@@ -1,6 +1,8 @@
 # Cymple - Cypher Modular Pythonic Language Extension
 
-A productivity tool for creating Cypher queries in Python
+A productivity tool for creating Cypher queries in Python.
+
+[![Documentation Status](https://readthedocs.org/projects/cymple/badge/?version=latest)](https://cymple.readthedocs.io/en/latest/?badge=latest)
 
 ## About the project
 
