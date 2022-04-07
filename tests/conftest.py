@@ -1,21 +1,8 @@
 import os
-from dotenv import dotenv_values
-from pathlib import Path
 from typing import Union
 
 
 environ_bak = dict(os.environ)
-
-
-def set_test_environ():
-    env_file_path = Path(__file__).parent.parent / 'config' / 'test.env'
-    test_env = dotenv_values(env_file_path)
-    os.environ.update(test_env)
-
-
-def restore_environ():
-    os.environ.clear()
-    os.environ.update(environ_bak)
 
 
 def pytest_sessionstart(session: 'Session') -> None:
@@ -24,7 +11,6 @@ def pytest_sessionstart(session: 'Session') -> None:
 
     :param pytest.Session session: The pytest session object.
     """
-    set_test_environ()
 
 
 def pytest_sessionfinish(
@@ -35,4 +21,3 @@ def pytest_sessionfinish(
     :param pytest.Session session: The pytest session object.
     :param int exitstatus: The status which pytest will return to the system.
     """
-    restore_environ()
