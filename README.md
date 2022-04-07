@@ -13,6 +13,9 @@ Consider using Cymple if you:
 * Want to write Cypher queries in a scalable and extensible manner
 * Want to be able to easily reuse Cypher queries across your code
 
+![image](https://user-images.githubusercontent.com/97434370/162214862-2cd00d28-0565-4838-af41-9e0c0f49b090.png)
+
+
 ## Getting Started
 
 ### Setup
@@ -39,6 +42,10 @@ MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 
 #### Autocompletion
 Cymple is designed to support autocompletion on IDEs that supprt autocompletion. This feature is context aware with respect to the current query being written. 
+
+
+![gif1](https://user-images.githubusercontent.com/97434370/162214796-cd1eeb70-9875-4a3c-9008-6bcda7fb4896.gif)
+
 
 #### Reusing Queries
 Two queries can be combined to a create a new one. 
@@ -77,7 +84,7 @@ source .venv/bin/activate
 # Install development dependencies.
 # Tools needed for deployment and packaging will be installed now.
 
-pip install -r requirements-dev.tx
+pip install -r requirements-dev.txt
 ```
 
 ### Development tools configurations
@@ -148,8 +155,8 @@ cymple/
 ├── requirements.txt       # Pinned versions of all the end-user dependency tree
 ├── setup.cfg  # packaging tool configurations
 ├── setup.py   # Packaging script
-├── src/  # Source code
-│   └── cymple/  # Source code
+├── src/  # All source code
+│   └── cymple/  # Cymple source code
 │       ├── internal/  # Cypher builder internal renderer
 │       │   ├── declarations/        # clause declarations
 │       │   ├── overloads/           # custom clause implementations
