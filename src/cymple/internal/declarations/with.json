@@ -1,0 +1,23 @@
+{
+  "clause_name": "WITH",
+  "methods": [
+    {
+      "name": "with_",
+      "docstring_summary": "Concatenate a WITH clause, keeping one or more variables given in 'variables' arg.",
+      "args": {
+        "variables": {
+          "type": "str",
+          "description": "A string refering to previously obtained variables, comma seperated"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable", 
+    "With", 
+    "Unwind", 
+    "Where", 
+    "CaseWhen", 
+    "Return"
+  ] 
+}

@@ -1,0 +1,45 @@
+{
+  "clause_name": "CASE WHEN",
+  "methods": [
+    {
+      "name": "case_when",
+      "docstring_summary": "Concatenate a CASE WHEN clause to the query, created from a list of given property filters.",
+      "args": {
+        "filters": {
+          "type": "Properties",
+          "description": "A Properties object that represents the set of properties to be filtered"
+        },
+        "on_true": {
+          "type": "str",
+          "description": "The query to run when the predicate is true"
+        },
+        "on_false": {
+          "type": "str",
+          "description": "The query to run when the predicate is false"
+        },
+        "ref_name": {
+          "type": "str",
+          "description": "The name which is used to refer to the newly filtered object"
+        },
+        "comparison_operator": {
+          "type": "str",
+          "default": "\"=\"",
+          "description": "A string operator, according to which the comparison between property values is done, e.g. for \"=\", we get: property.name = property.value"
+        },
+        "boolean_operator": {
+          "type": "str",
+          "default": "\"AND\"",
+          "description": "The boolean operator to apply between predicates"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable", 
+    "With", 
+    "Unwind", 
+    "Where", 
+    "CaseWhen", 
+    "Return"
+  ] 
+}

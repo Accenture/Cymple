@@ -1,0 +1,36 @@
+{
+  "clause_name": "NODE",
+  "methods": [
+    {
+      "name": "node",
+      "docstring_summary": "Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.",
+      "args": {
+        "labels": {
+          "type": "List[str]",
+          "default": "None",
+          "description": "The neo4j label (or list of labels) for that node"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "Properties",
+          "default": "None",
+          "description": "A Properties object that represents the set of properties by which the nodes are filtered"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "Relation",
+    "Return", 
+    "Delete", 
+    "With", 
+    "Where", 
+    "OperatorStart", 
+    "Set", 
+    "QueryStartAvailable"
+  ] 
+}

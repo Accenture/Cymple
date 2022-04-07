@@ -1,0 +1,9 @@
+{
+    "clause_name": "QUERY START",
+    "methods": [],
+    "successors": [
+      "Match",
+      "Merge", 
+      "Call"
+    ] 
+  }

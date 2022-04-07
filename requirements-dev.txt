@@ -1,0 +1,11 @@
+-r requirements-test.txt
+pip-tools==6.2.0
+setuptools==56.2.0
+wheel==0.36.2
+pylint==2.13.4
+pycodestyle==2.8.0
+pydocstyle==6.1.1
+sphinx==4.4.0
+sphinx-rtd-theme==1.0.0
+flake8==4.0.1
+autopep8==1.6.0

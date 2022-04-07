@@ -1,0 +1,20 @@
+{
+  "clause_name": "YIELD",
+  "methods": [
+    {
+      "name": "yield_",
+      "docstring_summary": "Concatenate a YIELD cluase, to yield a list of Mappings.",
+      "args": {
+        "mappings": {
+          "type": "List[Mapping]",
+          "description": "The list of mappings of db properties names to code names, to be yielded"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable",
+    "Node", 
+    "With"
+  ] 
+}

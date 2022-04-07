@@ -1,0 +1,28 @@
+{
+  "clause_name": "DELETE",
+  "methods": [
+    {
+      "name": "delete",
+      "docstring_summary": "Concatenate a DELETE clause for a referenced instance from the DB.",
+      "args": {
+        "ref_name": {
+          "type": "str",
+          "description": "The reference name to be used for the delete operation"
+        }
+      }
+    },
+    {
+      "name": "detach_delete",
+      "docstring_summary": "Concatenate a DETACH DELETE clause for a referenced instance from the DB.",
+      "args": {
+        "ref_name": {
+          "type": "str",
+          "description": "The reference name to be used for the delete operation"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "Query"
+  ] 
+}

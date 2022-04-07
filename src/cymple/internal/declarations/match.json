@@ -1,0 +1,16 @@
+{
+  "clause_name": "MATCH",
+  "methods": [
+    {
+      "name": "match"
+    },
+    {
+      "name": "match_optional"
+    }
+  ],
+  "successors": [
+    "Node",
+    "Return", 
+    "OperatorStart"
+  ]
+}

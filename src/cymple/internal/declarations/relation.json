@@ -1,0 +1,105 @@
+{
+  "clause_name": "RELATION",
+  "methods": [
+    {
+      "name": "related",
+      "docstring_summary": "Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "Properties",
+          "default": "None",
+          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_to",
+      "docstring_summary": "Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "Properties",
+          "default": "{}",
+          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_from",
+      "docstring_summary": "Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "Properties",
+          "default": "{}",
+          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_variable_len",
+      "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable length.",
+      "args": {
+        "hops_len": {
+          "type": "str",
+          "description": "The string representing the desired relationship length"
+        }
+      }
+    },
+    {
+      "name": "_directed_relation",
+      "docstring_summary": "Concatenate a graph Relationship (private method).",
+      "args": {
+        "direction": {
+          "type": "str",
+          "description": "The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional"
+        },
+        "label": {
+          "type": "str",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "Properties",
+          "default": "{}",
+          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "Node"
+  ] 
+}

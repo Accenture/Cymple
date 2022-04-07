@@ -1,0 +1,21 @@
+{
+  "clause_name": "UNWIND",
+  "methods": [
+    {
+      "name": "unwind",
+      "docstring_summary": "Concatenate an UNWIND clause, keeping one or more variables given in 'variables' arg.",
+      "args": {
+        "variables": {
+          "type": "str",
+          "description": "A string refering to previously obtained variables, comma seperated"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable", 
+    "With", 
+    "Unwind", 
+    "Return"
+  ] 
+}

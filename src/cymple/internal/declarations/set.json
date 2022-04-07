@@ -1,0 +1,21 @@
+{
+  "clause_name": "SET",
+  "methods": [
+    {
+      "name": "set",
+      "docstring_summary": "Concatenate a SET clause, using the given properties map.",
+      "args": {
+        "properties": {
+          "type": "Properties",
+          "description": "The properties dictionary that will be used to set the properties with their corresponding values"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable", 
+    "With", 
+    "Unwind", 
+    "Return"
+  ] 
+}

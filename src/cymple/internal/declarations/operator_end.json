@@ -1,0 +1,9 @@
+{
+  "clause_name": "OPERATOR END",
+  "successors": [
+    "QueryStartAvailable",
+    "Yield", 
+    "With", 
+    "Return"
+  ]
+}

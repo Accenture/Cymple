@@ -1,0 +1,31 @@
+{
+  "clause_name": "OPERATOR START",
+  "methods": [
+    {
+      "name": "operator_start",
+      "docstring_summary": "Concatenate an operator (e.g. ShortestPath), where its result may be given a name for future reference.",
+      "args": {
+        "operator": {
+          "type": "str",
+          "description": "The neo4j operator to be used (e.g. ShortestPath)"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name of the result, to be used later in the rest of the query"
+        },
+        "args": {
+          "type": "Properties",
+          "default": "None",
+          "description": "A string of arguments, to be passed to the operator function"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable",
+    "Node", 
+    "With", 
+    "OperatorEnd"
+  ] 
+}

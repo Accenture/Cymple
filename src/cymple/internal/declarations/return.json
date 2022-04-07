@@ -1,0 +1,36 @@
+{
+    "clause_name": "RETURN",
+    "methods": [
+      {
+        "name": "return_single",
+        "docstring_summary": "Concatenate a return statement for a single object.",
+        "args": {
+          "ref_name": {
+            "type": "str",
+            "description": "A reference name to be used to identify the name of the object as was defined earlier in the query"
+          },
+          "returned_name": {
+            "type": "str",
+            "default": "None",
+            "description": "The returned name of the object. If none provided, the returned name is {ref_name}"
+          }
+        }
+      },
+      {
+        "name": "return_multiple",
+        "docstring_summary": "Concatenate a return statement for mutiple objects.",
+        "args": {
+          "mappings": {
+            "type": "List[Mapping]",
+            "description": "The mapping (or a list of mappings) of db property names to code names, to be returned"
+          }
+        }
+      }
+    ],
+    "successors": [
+      "QueryStartAvailable", 
+      "With", 
+      "Unwind", 
+      "Return"
+    ] 
+  }
