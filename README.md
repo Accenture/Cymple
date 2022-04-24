@@ -122,13 +122,13 @@ pytest --cov=cymple
 
 ### Adding a new Cypher clause
 Adding a new Cypher clause to Cymple consists of few simple steps:
-1. Go to `src/cymple/internal/declarations/`. This directory conatins all supported clause declarations. 
+1. Go to `src/cymple/internal/declarations/`. This directory contains all supported clause declarations. 
 2. Add a json file describing the clause and the method(s) interfaces(s) of the new clause that you would like to add to the builder. If you do it for the first time, take a look at existing json files of currently supported Cypher clauses.
 3. Run `python src/cymple/internal/internal_renderer.py`. This script generates a new `builder.py` file with all clauses that were declared in `src/cymple/internal/declarations/`. 
 4. By default, by adding a declaration json file, the `internal_builder.py` script takes the declared clause and generates a method that simply concatenates your new clause to the builder's current query. However, if you need anything more complex than that, you can write your own implementation by creating a new method with your clause's name at `src/cymple/internal/overloads/`. Don't forget to run `python src/cymple/internal/internal_renderer.py` again :)
 5. If you're satisfied with the new clause, add a unit test in `test_clauses.py` and make sure it generates the expected Cypher string. 
 
-###Generating Documentation
+### Generating Documentation
 To generate a new HTML documentation, run:
 ```
 cd docs
