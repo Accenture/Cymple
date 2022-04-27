@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: [ master, develop ]
 
-env:
-  BRANCH_NAME: env.GITHUB_REF_NAME
-
 jobs:
   build:
 
@@ -43,7 +40,7 @@ jobs:
         pytest
 
   deploy:
-    if: env.BRANCH_NAME == "master"
+    if: github.ref_name == "master"
 
     runs-on: ubuntu-latest
     steps:
