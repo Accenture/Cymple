@@ -40,7 +40,7 @@ jobs:
         pytest
 
   deploy:
-    if: github.ref_name == 'master'
+    if: github.ref_name == 'develop'
 
     runs-on: ubuntu-latest
     steps:
