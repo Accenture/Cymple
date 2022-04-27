@@ -9,11 +9,11 @@ A productivity tool for creating Cypher queries in Python.
 Cymple is a lightweight Python package for creating queries in Cypher, Neo4j's graph database query language. 
 Give it a try, it's 'Cymple'!
 
-Consider using Cymple if you:
-* Want auto-completion for writing Cypher
-* Write compound Cypher queries without getting involved with strings
-* Want to write Cypher queries in a scalable and extensible manner
-* Want to be able to easily reuse Cypher queries across your code
+Consider using Cymple if you want:
+* auto-completion for writing Cypher
+* to write compound Cypher queries without getting involved with strings
+* to write Cypher queries in a scalable and extensible manner
+* to be able to easily reuse Cypher queries across your code
 
 ![image](https://user-images.githubusercontent.com/97434370/162214862-2cd00d28-0565-4838-af41-9e0c0f49b090.png)
 
@@ -42,8 +42,15 @@ This snippet will output the following Cypher query:
 MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 ```
 
+See the `samples` directory for examples. 
+
+##### Note: Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `executing_queries.py` in the `samples` directory. 
+
+```
+```
+
 #### Autocompletion
-Cymple is designed to support autocompletion on IDEs that supprt autocompletion. This feature is context aware with respect to the current query being written. 
+Cymple is designed to provide autocompletion on IDEs that support autocompletion. This feature is context aware with respect to the current query being written. 
 
 
 ![gif1](https://user-images.githubusercontent.com/97434370/162214796-cd1eeb70-9875-4a3c-9008-6bcda7fb4896.gif)
