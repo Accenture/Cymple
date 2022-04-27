@@ -40,7 +40,7 @@ jobs:
         pytest
 
   deploy:
-    if: env.GITHUB_REF_NAME == "master"
+    if: ${{ env.GITHUB_REF_NAME == "master" }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
