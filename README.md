@@ -9,11 +9,11 @@ A productivity tool for creating Cypher queries in Python.
 Cymple is a lightweight Python package for creating queries in Cypher, Neo4j's graph database query language. 
 Give it a try, it's 'Cymple'!
 
-Consider using Cymple if you:
-* Want auto-completion for writing Cypher
-* Write compound Cypher queries without getting involved with strings
-* Want to write Cypher queries in a scalable and extensible manner
-* Want to be able to easily reuse Cypher queries across your code
+Consider using Cymple if you want:
+* auto-completion for writing Cypher
+* to write compound Cypher queries without getting involved with strings
+* to write Cypher queries in a scalable and extensible manner
+* to be able to easily reuse Cypher queries across your code
 
 ![image](https://user-images.githubusercontent.com/97434370/162214862-2cd00d28-0565-4838-af41-9e0c0f49b090.png)
 
@@ -42,8 +42,15 @@ This snippet will output the following Cypher query:
 MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 ```
 
+See the `samples` directory for examples. 
+
+##### Note: Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `executing_queries.py` in the `samples` directory. 
+
+```
+```
+
 #### Autocompletion
-Cymple is designed to support autocompletion on IDEs that supprt autocompletion. This feature is context aware with respect to the current query being written. 
+Cymple is designed to provide autocompletion on IDEs that support autocompletion. This feature is context aware with respect to the current query being written. 
 
 
 ![gif1](https://user-images.githubusercontent.com/97434370/162214796-cd1eeb70-9875-4a3c-9008-6bcda7fb4896.gif)
@@ -122,13 +129,13 @@ pytest --cov=cymple
 
 ### Adding a new Cypher clause
 Adding a new Cypher clause to Cymple consists of few simple steps:
-1. Go to `src/cymple/internal/declarations/`. This directory conatins all supported clause declarations. 
+1. Go to `src/cymple/internal/declarations/`. This directory contains all supported clause declarations. 
 2. Add a json file describing the clause and the method(s) interfaces(s) of the new clause that you would like to add to the builder. If you do it for the first time, take a look at existing json files of currently supported Cypher clauses.
 3. Run `python src/cymple/internal/internal_renderer.py`. This script generates a new `builder.py` file with all clauses that were declared in `src/cymple/internal/declarations/`. 
 4. By default, by adding a declaration json file, the `internal_builder.py` script takes the declared clause and generates a method that simply concatenates your new clause to the builder's current query. However, if you need anything more complex than that, you can write your own implementation by creating a new method with your clause's name at `src/cymple/internal/overloads/`. Don't forget to run `python src/cymple/internal/internal_renderer.py` again :)
 5. If you're satisfied with the new clause, add a unit test in `test_clauses.py` and make sure it generates the expected Cypher string. 
 
-###Generating Documentation
+### Generating Documentation
 To generate a new HTML documentation, run:
 ```
 cd docs
