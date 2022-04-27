@@ -40,7 +40,8 @@ jobs:
         pytest
 
   deploy:
-    if: github.ref_name == 'develop'
+    if: github.ref_name == 'develop
+    needs: 'build'
 
     runs-on: ubuntu-latest
     steps:
@@ -59,4 +60,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         with:
           user: __token__
-          password: "test" #${{ secrets.PUBLIC_PYPI_ACCESS_TOKEN }}
+          password: ${{ secrets.PUBLIC_PYPI_ACCESS_TOKEN }}
