@@ -548,11 +548,11 @@ class MergeAvailable(NodeAfterMerge, Return, OperatorStart):
     """A class decorator declares a Merge is available in the current query."""
 
 
-class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, Set, QueryStartAvailable):
+class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable):
     """A class decorator declares a Node is available in the current query."""
 
 
-class NodeAfterMergeAvailable(Relation, Return, Delete, With, Where, OperatorStart, Set, OnCreate, OnMatch, QueryStartAvailable):
+class NodeAfterMergeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, OnCreate, OnMatch, QueryStartAvailable):
     """A class decorator declares a NodeAfterMerge is available in the current query."""
 
 
