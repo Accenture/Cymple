@@ -3,6 +3,7 @@
 A productivity tool for creating Cypher queries in Python.
 
 [![Documentation Status](https://readthedocs.org/projects/cymple/badge/?version=latest)](https://cymple.readthedocs.io/en/latest/?badge=latest)
+[![Python package](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml/badge.svg)](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml)
 
 ## About the project
 
