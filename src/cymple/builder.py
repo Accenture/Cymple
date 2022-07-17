@@ -286,7 +286,7 @@ class OperatorEnd(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: OperatorEndAvailable
         """
-        return OperatorEndAvailable(self.query + ')')
+        return OperatorEndAvailable(self.query + ' )')
 
 
 class OperatorStart(Query):
@@ -306,7 +306,7 @@ class OperatorStart(Query):
         :rtype: OperatorStartAvailable
         """
         result_name = '' if ref_name is None else f'{ref_name} = '
-        arguments = '' if args is None else f'{args}'
+        arguments = '' if args is None else f' {args}'
 
         return OperatorStartAvailable(self.query + f' {result_name}{operator}({arguments}')
 
