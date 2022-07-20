@@ -13,8 +13,11 @@ def related_from(self, label: str, ref_name: str = None, properties: str = {}):
     return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
 
 
-def related_variable_len(self, hops_len: str):
-    relation_length = '' if hops_len is None else f'{hops_len}'
+def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
+    min_hops_str = '' if min_hops == -1 else str(min_hops)
+    max_hops_str = '' if max_hops == -1 else str(max_hops)
+
+    relation_length = '*' if min_hops == -1 and max_hops == -1 else (f'*{min_hops_str}'if min_hops == max_hops  else f'*{min_hops_str}..{max_hops_str}')
 
     if relation_length:
         realtion_str = f'[{relation_length}]'

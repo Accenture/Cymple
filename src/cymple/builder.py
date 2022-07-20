@@ -362,16 +362,22 @@ class Relation(Query):
         """
         return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
 
-    def related_variable_len(self, hops_len: str):
-        """Concatenate a uni-directional graph Relationship, with a variable length.
+    def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
+        """Concatenate a uni-directional graph Relationship, with a variable path length.
 
-        :param hops_len: The string representing the desired relationship length
-        :type hops_len: str
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1
+        :type max_hops: int
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        relation_length = '' if hops_len is None else f'{hops_len}'
+        min_hops_str = '' if min_hops == -1 else str(min_hops)
+        max_hops_str = '' if max_hops == -1 else str(max_hops)
+
+        relation_length = '*' if min_hops == -1 and max_hops == - \
+            1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
 
         if relation_length:
             realtion_str = f'[{relation_length}]'
