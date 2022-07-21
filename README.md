@@ -46,7 +46,7 @@ MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 See the `samples` directory for examples. 
 
 ##### Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. 
-##### For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `e2e.py` in the `samples` directory. 
+##### For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `neo4j_e2e.py` in the `samples` directory. 
 
 
 #### Autocompletion
