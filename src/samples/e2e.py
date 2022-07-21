@@ -1,4 +1,3 @@
-from neo4j import GraphDatabase
 from cymple import QueryBuilder
 from samples.neo4j_helper import Neo4jDbSession, Neo4jQueryHelper
 from samples.neo4j_config import uri as neo4j_uri, db_name as neo4j_db
@@ -13,6 +12,7 @@ reference = 'node'
 
 def init(neo4j_user, neo4j_password):
     """Init this module by creating a session to the (neo4j) DB, creating a helper for running queries and a query builder"""
+    from neo4j import GraphDatabase
     global helper
     global builder
 
