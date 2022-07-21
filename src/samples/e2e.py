@@ -13,6 +13,7 @@ reference = 'node'
 def init(neo4j_user, neo4j_password):
     """Init this module by creating a session to the (neo4j) DB, creating a helper for running queries and a query builder"""
     from neo4j import GraphDatabase
+
     global helper
     global builder
 

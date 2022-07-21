@@ -1,5 +1,4 @@
 from typing import Callable, Dict, List
-from neo4j import Driver
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -8,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 class Neo4jDbSession:
     """Context manager for a neo4j DB session."""
 
-    def __init__(self, driver: Driver, db_name: str):
+    def __init__(self, driver, db_name: str):
         self._db_name = db_name
         self._driver = driver
 
