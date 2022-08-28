@@ -66,11 +66,17 @@
     },
     {
       "name": "related_variable_len",
-      "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable length.",
+      "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable path length.",
       "args": {
-        "hops_len": {
-          "type": "str",
-          "description": "The string representing the desired relationship length"
+        "min_hops": {
+          "type": "int",
+          "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
+          "default": "-1"
+        },
+        "max_hops": {
+          "type": "int",
+          "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
+          "default": "-1"
         }
       }
     },

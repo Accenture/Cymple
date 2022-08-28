@@ -30,6 +30,7 @@
     "With", 
     "Where", 
     "OperatorStart", 
+    "OperatorEnd", 
     "Set", 
     "QueryStartAvailable"
   ] 

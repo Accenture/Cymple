@@ -3,6 +3,7 @@
 A productivity tool for creating Cypher queries in Python.
 
 [![Documentation Status](https://readthedocs.org/projects/cymple/badge/?version=latest)](https://cymple.readthedocs.io/en/latest/?badge=latest)
+[![Python package](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml/badge.svg)](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml)
 
 ## About the project
 
@@ -44,10 +45,9 @@ MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 
 See the `samples` directory for examples. 
 
-##### Note: Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `executing_queries.py` in the `samples` directory. 
+##### Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. 
+##### For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `neo4j_e2e.py` in the `samples` directory. 
 
-```
-```
 
 #### Autocompletion
 Cymple is designed to provide autocompletion on IDEs that support autocompletion. This feature is context aware with respect to the current query being written. 
