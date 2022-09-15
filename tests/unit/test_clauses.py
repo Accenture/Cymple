@@ -1,6 +1,5 @@
 import pytest
 from cymple import QueryBuilder
-from cymple.typedefs import Mapping
 
 qb = QueryBuilder()
 
@@ -23,16 +22,16 @@ rendered = {
     'RELATION (unidirectional)': qb.reset().match().node().related().node(),
     'RELATION (variable length)': qb.reset().match().node().related_variable_len(min_hops=1, max_hops=2).node(),
     'RELATION (variable length, empty)': qb.reset().match().node().related_variable_len().node(),
-    'RETURN (single)': qb.reset().match().node(ref_name='n').return_single('n'),
-    'RETURN (multiple)': qb.reset().match().node(ref_name='n').return_multiple(Mapping('n.name', 'name')),
-    'RETURN (multiple, list)': qb.reset().match().node(ref_name='n').return_multiple([Mapping('n.name', 'name'), Mapping('n.age', 'age')]),
+    'RETURN (single)': qb.reset().match().node(ref_name='n').return_literal('n'),
+    'RETURN (multiple)': qb.reset().match().node(ref_name='n').return_mapping(('n.name', 'name')),
+    'RETURN (multiple, list)': qb.reset().match().node(ref_name='n').return_mapping([('n.name', 'name'), ('n.age', 'age')]),
     'SET': qb.reset().merge().node(ref_name='n').set({'n.name': 'Alice'}),
     'ON CREATE': qb.reset().merge().node(ref_name='n').on_create().set({'n.name': 'Bob'}),
     'ON MATCH': qb.reset().merge().node(ref_name='n').on_match().set({'n.name': 'Bob'}),
     'UNWIND': qb.reset().match().node(ref_name='n').with_('n').unwind('n'),
     'WITH': qb.reset().match().node(ref_name='a').with_('a,b'),
-    'YIELD': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_(Mapping('length(p)', 'len')),
-    'YIELD (list)': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_([Mapping('length(p)', 'len'), Mapping('relationships(p)', 'rels')]),
+    'YIELD': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_(('length(p)', 'len')),
+    'YIELD (list)': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_([('length(p)', 'len'), ('relationships(p)', 'rels')]),
 }
 
 expected = {

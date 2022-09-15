@@ -8,7 +8,7 @@ def get_all_nodes_by_label(labels: List[str], node_name: str = 'n'):
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name)
-            .return_single(ref_name=node_name)
+            .return_literal(literal=node_name)
             )
 
 
@@ -16,7 +16,7 @@ def get_all_nodes_by_label_and_properties(labels: List[str], properties: Dict[st
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name, properties=properties)
-            .return_single(ref_name=node_name)
+            .return_literal(literal=node_name)
             )
 
 
@@ -28,7 +28,7 @@ def get_all_paths(src_node_labels: List[str], dst_node_labels: List[str], relati
             .related(label=relationship_type)
             .node(labels=dst_node_labels)
             .operator_end()
-            .return_single(ref_name=path_name)
+            .return_literal(literal=path_name)
             )
 
 
@@ -38,7 +38,7 @@ def get_all_nodes_related_to_nodes(src_node_labels: List[str], dst_node_labels: 
             .node(labels=src_node_labels)
             .related(label=relationship_type)
             .node(labels=dst_node_labels, ref_name=dst_node_name)
-            .return_single(ref_name=dst_node_name)
+            .return_literal(literal=dst_node_name)
             )
 
 
@@ -48,7 +48,7 @@ def get_all_nodes_related_by_fixed_num_of_hops(src_node_labels: List[str], dst_n
             .node(labels=src_node_labels)
             .related_variable_len(min_hops=num_hops, max_hops=num_hops)
             .node(labels=dst_node_labels, ref_name=dst_node_name)
-            .return_single(ref_name=dst_node_name)
+            .return_literal(literal=dst_node_name)
             )
 
 
@@ -58,7 +58,7 @@ def get_all_nodes_related_by_varying_num_of_hops(src_node_labels: List[str], dst
             .node(labels=src_node_labels)
             .related_variable_len(min_hops=min_hops, max_hops=max_hops)
             .node(labels=dst_node_labels, ref_name=dst_node_name)
-            .return_single(ref_name=dst_node_name)
+            .return_literal(literal=dst_node_name)
             )
 
 

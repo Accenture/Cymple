@@ -29,7 +29,7 @@ def read_movie_node(movie_name: str):
     query = str(builder
                 .match()
                 .node(labels=label, ref_name=reference, properties={property: movie_name})
-                .return_single(f'{reference}.{property}', property))
+                .return_mapping((f'{reference}.{property}', property)))
     results = helper.read(query)
     return results[0].get(property) if results else None
 
@@ -40,6 +40,6 @@ def write_movie_node(movie_name: str):
     query = str(builder
                 .merge()
                 .node(labels=label, ref_name=reference, properties={property: movie_name})
-                .return_single(f'{reference}.{property}', property))
+                .return_mapping((f'{reference}.{property}', property)))
     results = helper.write(query)
     return results[0].get(property) if results else None
