@@ -3,7 +3,7 @@ from samples.neo4j_helper import Neo4jDbSession, Neo4jQueryHelper
 from samples.neo4j_config import uri as neo4j_uri, db_name as neo4j_db
 
 helper: Neo4jQueryHelper
-qb: QueryBuilder
+builder: QueryBuilder
 
 label = 'Movie'
 property = 'name'
