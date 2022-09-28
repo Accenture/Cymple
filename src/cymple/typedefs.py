@@ -1,12 +1,8 @@
 """Cymple's API type definitions."""
-from typing import NamedTuple, Any
+from collections import namedtuple
+from typing import Any
 
-
-class Mapping(NamedTuple):
-    """Mapping between property name in neo4j db and the name used in code."""
-
-    ref_name: str
-    returned_name: str = None
+Mapping = namedtuple('Mapping', ['ref_name', 'returned_name'], defaults=(None, None))
 
 
 class Properties(dict):

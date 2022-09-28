@@ -2,22 +2,17 @@
     "clause_name": "RETURN",
     "methods": [
       {
-        "name": "return_single",
-        "docstring_summary": "Concatenate a return statement for a single object.",
+        "name": "return_literal",
+        "docstring_summary": "Concatenate a literal return statement.",
         "args": {
-          "ref_name": {
+          "literal": {
             "type": "str",
-            "description": "A reference name to be used to identify the name of the object as was defined earlier in the query"
-          },
-          "returned_name": {
-            "type": "str",
-            "default": "None",
-            "description": "The returned name of the object. If none provided, the returned name is {ref_name}"
+            "description": "A Cypher string describing the objects to be returned, referencing name/names which were defined earlier in the query"
           }
         }
       },
       {
-        "name": "return_multiple",
+        "name": "return_mapping",
         "docstring_summary": "Concatenate a return statement for mutiple objects.",
         "args": {
           "mappings": {

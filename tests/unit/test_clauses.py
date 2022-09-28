@@ -1,6 +1,5 @@
 import pytest
 from cymple import QueryBuilder
-from cymple.typedefs import Mapping
 
 qb = QueryBuilder()
 
@@ -18,21 +17,21 @@ rendered = {
     'NODE': qb.reset().match().node(['label1', 'label2'], 'node', {'name': 'Bob'}),
     'NODE MERGE': qb.reset().merge().node(labels=['label1', 'label2'], ref_name='n', properties={'name': 'Bob'}).related_to().node(ref_name='m'),
     'OPERATOR': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end(),
-    'RELATION (forawrd)': qb.reset().match().node().related_to().node(),
+    'RELATION (forward)': qb.reset().match().node().related_to().node(),
     'RELATION (backward)': qb.reset().match().node().related_from().node(),
     'RELATION (unidirectional)': qb.reset().match().node().related().node(),
     'RELATION (variable length)': qb.reset().match().node().related_variable_len(min_hops=1, max_hops=2).node(),
     'RELATION (variable length, empty)': qb.reset().match().node().related_variable_len().node(),
-    'RETURN (single)': qb.reset().match().node(ref_name='n').return_single('n'),
-    'RETURN (multiple)': qb.reset().match().node(ref_name='n').return_multiple(Mapping('n.name', 'name')),
-    'RETURN (multiple, list)': qb.reset().match().node(ref_name='n').return_multiple([Mapping('n.name', 'name'), Mapping('n.age', 'age')]),
+    'RETURN (literal)': qb.reset().match().node(ref_name='n').return_literal('n'),
+    'RETURN (mapping)': qb.reset().match().node(ref_name='n').return_mapping(('n.name', 'name')),
+    'RETURN (mapping, list)': qb.reset().match().node(ref_name='n').return_mapping([('n.name', 'name'), ('n.age', 'age')]),
     'SET': qb.reset().merge().node(ref_name='n').set({'n.name': 'Alice'}),
     'ON CREATE': qb.reset().merge().node(ref_name='n').on_create().set({'n.name': 'Bob'}),
     'ON MATCH': qb.reset().merge().node(ref_name='n').on_match().set({'n.name': 'Bob'}),
     'UNWIND': qb.reset().match().node(ref_name='n').with_('n').unwind('n'),
     'WITH': qb.reset().match().node(ref_name='a').with_('a,b'),
-    'YIELD': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_(Mapping('length(p)', 'len')),
-    'YIELD (list)': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_([Mapping('length(p)', 'len'), Mapping('relationships(p)', 'rels')]),
+    'YIELD': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_(('length(p)', 'len')),
+    'YIELD (list)': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_([('length(p)', 'len'), ('relationships(p)', 'rels')]),
 }
 
 expected = {
@@ -49,14 +48,14 @@ expected = {
     'NODE': 'MATCH (node: label1: label2 {name : "Bob"})',
     'NODE MERGE': 'MERGE (n: label1: label2 {name : "Bob"})-->(m)',
     'OPERATOR': 'CALL p = SHORTESTPATH( (:A)-[*]-(:B) )',
-    'RELATION (forawrd)': 'MATCH ()-->()',
+    'RELATION (forward)': 'MATCH ()-->()',
     'RELATION (backward)': 'MATCH ()<--()',
     'RELATION (unidirectional)': 'MATCH ()--()',
     'RELATION (variable length)': 'MATCH ()-[*1..2]-()',
     'RELATION (variable length, empty)': 'MATCH ()-[*]-()',
-    'RETURN (single)': 'MATCH (n) RETURN n',
-    'RETURN (multiple)': 'MATCH (n) RETURN n.name as name',
-    'RETURN (multiple, list)': 'MATCH (n) RETURN n.name as name, n.age as age',
+    'RETURN (literal)': 'MATCH (n) RETURN n',
+    'RETURN (mapping)': 'MATCH (n) RETURN n.name as name',
+    'RETURN (mapping, list)': 'MATCH (n) RETURN n.name as name, n.age as age',
     'SET': 'MERGE (n) SET n.name = "Alice"',
     'ON CREATE': 'MERGE (n) ON CREATE SET n.name = "Bob"',
     'ON MATCH': 'MERGE (n) ON MATCH SET n.name = "Bob"',

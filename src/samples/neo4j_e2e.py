@@ -3,7 +3,7 @@ from samples.neo4j_helper import Neo4jDbSession, Neo4jQueryHelper
 from samples.neo4j_config import uri as neo4j_uri, db_name as neo4j_db
 
 helper: Neo4jQueryHelper
-qb: QueryBuilder
+builder: QueryBuilder
 
 label = 'Movie'
 property = 'name'
@@ -29,7 +29,7 @@ def read_movie_node(movie_name: str):
     query = str(builder
                 .match()
                 .node(labels=label, ref_name=reference, properties={property: movie_name})
-                .return_single(f'{reference}.{property}', property))
+                .return_mapping((f'{reference}.{property}', property)))
     results = helper.read(query)
     return results[0].get(property) if results else None
 
@@ -40,6 +40,6 @@ def write_movie_node(movie_name: str):
     query = str(builder
                 .merge()
                 .node(labels=label, ref_name=reference, properties={property: movie_name})
-                .return_single(f'{reference}.{property}', property))
+                .return_mapping((f'{reference}.{property}', property)))
     results = helper.write(query)
     return results[0].get(property) if results else None

@@ -422,24 +422,21 @@ class Relation(Query):
 class Return(Query):
     """A class for representing a "RETURN" clause."""
 
-    def return_single(self, ref_name: str, returned_name: str = None):
-        """Concatenate a return statement for a single object.
+    def return_literal(self, literal: str):
+        """Concatenate a literal return statement.
 
-        :param ref_name: A reference name to be used to identify the name of the object as was defined earlier in the
-            query
-        :type ref_name: str
-        :param returned_name: The returned name of the object. If none provided, the returned name is {ref_name},
-            defaults to None
-        :type returned_name: str
+        :param literal: A Cypher string describing the objects to be returned, referencing name/names which were
+            defined earlier in the query
+        :type literal: str
 
         :return: A Query object with a query that contains the new clause.
         :rtype: ReturnAvailable
         """
-        ret = ' RETURN ' + (f'{ref_name} as {returned_name}' if returned_name else ref_name)
+        ret = f' RETURN {literal}'
 
         return Query(self.query + ret)
 
-    def return_multiple(self, mappings: List[Mapping]):
+    def return_mapping(self, mappings: List[Mapping]):
         """Concatenate a return statement for mutiple objects.
 
         :param mappings: The mapping (or a list of mappings) of db property names to code names, to be returned
@@ -448,12 +445,12 @@ class Return(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: ReturnAvailable
         """
-        if isinstance(mappings, Mapping):
-            return self.return_single(mappings.ref_name, mappings.returned_name)
+        if not isinstance(mappings, list):
+            mappings = [mappings]
 
         ret = ' RETURN ' + \
             ', '.join(
-                f'{mapping.ref_name} as {mapping.returned_name}' if mapping.returned_name else mapping.ref_name
+                f'{mapping[0]} as {mapping[1]}' if mapping[1] else mapping[0].replace(".", "_")
                 for mapping in mappings)
 
         return Query(self.query + ret)
@@ -519,9 +516,10 @@ class Yield(Query):
         """
         if not isinstance(mappings, list):
             mappings = [mappings]
+
         query = ' YIELD ' + \
-            ', '.join(f'{mapping.ref_name} as '
-                      f'{mapping.returned_name if mapping.returned_name else mapping.ref_name.replace(".", "_")}'
+            ', '.join(f'{mapping[0]} as '
+                      f'{mapping[1] if mapping[1] else mapping[0].replace(".", "_")}'
                       for mapping in mappings)
         return YieldAvailable(self.query + query)
 
