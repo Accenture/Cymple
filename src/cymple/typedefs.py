@@ -10,7 +10,7 @@ class Properties(dict):
 
     @staticmethod
     def _escape(string: str) -> str:
-        res = string.replace('"', '\\"').replace("'", "\\'")
+        res = string.replace('\\', '\\\\').replace('"', '\\"').replace("'", "\\'").replace('\r', '\\r').replace('\n', '\\n')
         return res
 
     @staticmethod
