@@ -35,7 +35,7 @@ from cymple import QueryBuilder
 
 qb = QueryBuilder()
 query = qb.match().node(labels='Person', ref_name='p')
-query = query.where('p.name', '=', '"Michelle"').return_single('p')
+query = query.where('p.name', '=', '"Michelle"').return_literal('p')
 print(query)
 ```
 This snippet will output the following Cypher query:
