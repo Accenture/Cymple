@@ -2,7 +2,7 @@
 def return_literal(self, literal: str):
     ret = f' RETURN {literal}'
 
-    return Query(self.query + ret)
+    return ReturnAvailable(self.query + ret)
 
 
 def return_mapping(self, mappings):
@@ -14,4 +14,4 @@ def return_mapping(self, mappings):
             f'{mapping[0]} as {mapping[1]}' if mapping[1] else mapping[0].replace(".", "_")
             for mapping in mappings)
 
-    return Query(self.query + ret)
+    return ReturnAvailable(self.query + ret)
