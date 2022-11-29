@@ -592,7 +592,7 @@ class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, Operat
     """A class decorator declares a Node is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return):
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
     """A class decorator declares a With is available in the current query."""
 
 

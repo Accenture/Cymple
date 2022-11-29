@@ -18,6 +18,7 @@
     "Unwind", 
     "Where", 
     "CaseWhen", 
-    "Return"
+    "Return",
+    "Set"
   ] 
 }
