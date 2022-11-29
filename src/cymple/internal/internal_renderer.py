@@ -162,9 +162,9 @@ def render_builder_code():
         file.write(decorators_output)
         file.write(finale_output)
 
+    builder_path = os.path.join(pathlib.Path(__file__).parent.parent.resolve(), "builder.py")
     os.system(
-        f'autopep8 {pathlib.Path(__file__).parent.parent.resolve()}\\builder.py --in-place --max-line-length {MAX_LINE_LEN}')
-
+        f'autopep8 {builder_path} --in-place --max-line-length {MAX_LINE_LEN}')
 
 if __name__ == '__main__':
     render_builder_code()
