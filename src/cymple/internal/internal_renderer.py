@@ -166,5 +166,6 @@ def render_builder_code():
     os.system(
         f'autopep8 {builder_path} --in-place --max-line-length {MAX_LINE_LEN}')
 
+
 if __name__ == '__main__':
     render_builder_code()
