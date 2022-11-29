@@ -1,0 +1,24 @@
+ {
+  "clause_name": "LIMIT",
+  "methods": [
+    {
+      "name": "limit",
+      "docstring_summary": "Concatenate a limit statement",
+      "args": {
+        "limitation": {
+          "type": "Union[int, str]",
+          "description": "A non-negative integer or a string of cypher expression that evaluates to a non-negative integer (as long as it is not referring to any external variables)"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable",
+    "With",
+    "Unwind",
+    "Where",
+    "CaseWhen",
+    "Return",
+    "Set"
+  ]
+}

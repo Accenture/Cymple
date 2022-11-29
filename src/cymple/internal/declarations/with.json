@@ -19,6 +19,7 @@
     "Where", 
     "CaseWhen", 
     "Return",
-    "Set"
+    "Set",
+    "Limit"
   ] 
 }
