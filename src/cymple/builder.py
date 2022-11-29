@@ -3,7 +3,7 @@
 # pylint: disable=R0901
 # pylint: disable=R0903
 # pylint: disable=W0102
-from typing import List
+from typing import List, Union
 from .typedefs import Mapping, Properties
 
 
@@ -365,6 +365,23 @@ class Call(Query):
         return CallAvailable(self.query + ' CALL')
 
 
+class Limit(Query):
+    """A class for representing a "LIMIT" clause."""
+
+    def limit(self, limitation: Union[int, str]):
+        """Concatenate a limit statement.
+
+        :param limitation: A non-negative integer or a string of cypher expression that evaluates to a non-negative
+            integer (as long as it is not referring to any external variables)
+        :type limitation: Union[int, str]
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: LimitAvailable
+        """
+        ret = f" LIMIT {limitation}"
+        return LimitAvailable(self.query + ret)
+
+
 class NodeAfterMerge(Query):
     """A class for representing a "NODE AFTER MERGE" clause."""
 
@@ -552,7 +569,7 @@ class OperatorStartAvailable(QueryStartAvailable, Node, With, OperatorEnd):
     """A class decorator declares a OperatorStart is available in the current query."""
 
 
-class ReturnAvailable(QueryStartAvailable, With, Unwind, Return):
+class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit):
     """A class decorator declares a Return is available in the current query."""
 
 
@@ -570,6 +587,10 @@ class MatchAvailable(Node, Return, OperatorStart):
 
 class CallAvailable(Node, Return, OperatorStart):
     """A class decorator declares a Call is available in the current query."""
+
+
+class LimitAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
+    """A class decorator declares a Limit is available in the current query."""
 
 
 class NodeAfterMergeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, OnCreate, OnMatch, QueryStartAvailable):
@@ -592,7 +613,7 @@ class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, Operat
     """A class decorator declares a Node is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set, Limit):
     """A class decorator declares a With is available in the current query."""
 
 
