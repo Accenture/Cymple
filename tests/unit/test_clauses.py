@@ -32,6 +32,10 @@ rendered = {
     'WITH': qb.reset().match().node(ref_name='a').with_('a,b'),
     'YIELD': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_(('length(p)', 'len')),
     'YIELD (list)': qb.reset().call().operator_start('SHORTESTPATH', 'p', '(:A)-[*]-(:B)').operator_end().yield_([('length(p)', 'len'), ('relationships(p)', 'rels')]),
+    'LIMIT': qb.reset().match().node(ref_name='n').return_literal('n').limit(1),
+    'LIMIT (expression)': qb.reset().match().node(ref_name='n').return_literal('n').limit("1 + toInteger(3 * rand())"),
+    'LIMIT (with)': qb.reset().match().node(ref_name='n').with_('n').limit(1),
+    'LIMIT (with set)': qb.reset().match().node(ref_name='n').with_('n').limit(1).set({'n.name': 'Bob'})
 }
 
 expected = {
@@ -63,6 +67,10 @@ expected = {
     'WITH': 'MATCH (a) WITH a,b',
     'YIELD': 'CALL p = SHORTESTPATH( (:A)-[*]-(:B) ) YIELD length(p) as len',
     'YIELD (list)': 'CALL p = SHORTESTPATH( (:A)-[*]-(:B) ) YIELD length(p) as len, relationships(p) as rels',
+    'LIMIT': 'MATCH (n) RETURN n LIMIT 1',
+    'LIMIT (expression)': 'MATCH (n) RETURN n LIMIT 1 + toInteger(3 * rand())',
+    'LIMIT (with)': 'MATCH (n) WITH n LIMIT 1',
+    'LIMIT (with set)': 'MATCH (n) WITH n LIMIT 1 SET n.name = "Bob"'
 }
 
 
