@@ -138,7 +138,7 @@ def render_builder_code():
     clauses_output += '# pylint: disable=R0901\n'
     clauses_output += '# pylint: disable=R0903\n'
     clauses_output += '# pylint: disable=W0102\n'
-    clauses_output += 'from typing import List\n'
+    clauses_output += 'from typing import List, Union\n'
     clauses_output += 'from .typedefs import Mapping, Properties\n\n'
     clauses_output += inspect.getsource(query_class) + '\n\n'
 
@@ -162,8 +162,9 @@ def render_builder_code():
         file.write(decorators_output)
         file.write(finale_output)
 
+    builder_path = os.path.join(pathlib.Path(__file__).parent.parent.resolve(), "builder.py")
     os.system(
-        f'autopep8 {pathlib.Path(__file__).parent.parent.resolve()}\\builder.py --in-place --max-line-length {MAX_LINE_LEN}')
+        f'autopep8 {builder_path} --in-place --max-line-length {MAX_LINE_LEN}')
 
 
 if __name__ == '__main__':

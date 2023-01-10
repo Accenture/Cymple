@@ -3,7 +3,7 @@
     "methods": [
       {
         "name": "return_literal",
-        "docstring_summary": "Concatenate a literal return statement.",
+        "docstring_summary": "Concatenate a literal RETURN statement.",
         "args": {
           "literal": {
             "type": "str",
@@ -13,7 +13,7 @@
       },
       {
         "name": "return_mapping",
-        "docstring_summary": "Concatenate a return statement for mutiple objects.",
+        "docstring_summary": "Concatenate a RETURN statement for mutiple objects.",
         "args": {
           "mappings": {
             "type": "List[Mapping]",
@@ -26,6 +26,7 @@
       "QueryStartAvailable", 
       "With", 
       "Unwind", 
-      "Return"
+      "Return",
+      "Limit"
     ] 
   }

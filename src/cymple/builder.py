@@ -3,7 +3,7 @@
 # pylint: disable=R0901
 # pylint: disable=R0903
 # pylint: disable=W0102
-from typing import List
+from typing import List, Union
 from .typedefs import Mapping, Properties
 
 
@@ -89,7 +89,7 @@ class Delete(Query):
         :rtype: DeleteAvailable
         """
         ret = f' DELETE {ref_name}'
-        return Query(self.query + ret)
+        return DeleteAvailable(self.query + ret)
 
     def detach_delete(self, ref_name: str):
         """Concatenate a DETACH DELETE clause for a referenced instance from the DB.
@@ -101,44 +101,24 @@ class Delete(Query):
         :rtype: DeleteAvailable
         """
         ret = f' DETACH DELETE {ref_name}'
-        return Query(self.query + ret)
+        return DeleteAvailable(self.query + ret)
 
 
-class Where(Query):
-    """A class for representing a "WHERE" clause."""
+class Limit(Query):
+    """A class for representing a "LIMIT" clause."""
 
-    def where(self, name: str, comparison_operator: str, value: str):
-        """Concatenate a WHERE clause to the query, created as {name} {comparison_operator} {value}. E.g. x = 'abc'.
+    def limit(self, limitation: Union[int, str]):
+        """Concatenate a limit statement.
 
-        :param name: The name of the object which is to be used in the comparison
-        :type name: str
-        :param comparison_operator: A string operator, according to which the comparison between compared object and
-            the {value} is done, e.g. for "=", we get: {name} = {value}
-        :type comparison_operator: str
-        :param value: The value which is compared against
-        :type value: str
+        :param limitation: A non-negative integer or a string of cypher expression that evaluates to a non-negative
+            integer (as long as it is not referring to any external variables)
+        :type limitation: Union[int, str]
 
         :return: A Query object with a query that contains the new clause.
-        :rtype: WhereAvailable
+        :rtype: LimitAvailable
         """
-        return self.where_multiple({name: value}, comparison_operator)
-
-    def where_multiple(self, filters: Properties, comparison_operator: str = "=", boolean_operator: str = ' AND '):
-        """Concatenate a WHERE clause to the query, created from a list of given property filters.
-
-        :param filters: A Properties object that represents the set of properties to be filtered
-        :type filters: Properties
-        :param comparison_operator: A string operator, according to which the comparison between property values is
-            done, e.g. for "=", we get: property.name = property.value, defaults to "="
-        :type comparison_operator: str
-        :param boolean_operator: The boolean operator to apply between predicates, defaults to ' AND '
-        :type boolean_operator: str
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: WhereAvailable
-        """
-        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
-        return WhereAvailable(self.query + filt)
+        ret = f" LIMIT {limitation}"
+        return LimitAvailable(self.query + ret)
 
 
 class Match(Query):
@@ -423,7 +403,7 @@ class Return(Query):
     """A class for representing a "RETURN" clause."""
 
     def return_literal(self, literal: str):
-        """Concatenate a literal return statement.
+        """Concatenate a literal RETURN statement.
 
         :param literal: A Cypher string describing the objects to be returned, referencing name/names which were
             defined earlier in the query
@@ -434,10 +414,10 @@ class Return(Query):
         """
         ret = f' RETURN {literal}'
 
-        return Query(self.query + ret)
+        return ReturnAvailable(self.query + ret)
 
     def return_mapping(self, mappings: List[Mapping]):
-        """Concatenate a return statement for mutiple objects.
+        """Concatenate a RETURN statement for mutiple objects.
 
         :param mappings: The mapping (or a list of mappings) of db property names to code names, to be returned
         :type mappings: List[Mapping]
@@ -453,7 +433,7 @@ class Return(Query):
                 f'{mapping[0]} as {mapping[1]}' if mapping[1] else mapping[0].replace(".", "_")
                 for mapping in mappings)
 
-        return Query(self.query + ret)
+        return ReturnAvailable(self.query + ret)
 
 
 class Set(Query):
@@ -485,6 +465,55 @@ class Unwind(Query):
         :rtype: UnwindAvailable
         """
         return UnwindAvailable(self.query + f' UNWIND {variables}')
+
+
+class Where(Query):
+    """A class for representing a "WHERE" clause."""
+
+    def where(self, name: str, comparison_operator: str, value: str):
+        """Concatenate a WHERE clause to the query, created as {name} {comparison_operator} {value}. E.g. x = 'abc'.
+
+        :param name: The name of the object which is to be used in the comparison
+        :type name: str
+        :param comparison_operator: A string operator, according to which the comparison between compared object and
+            the {value} is done, e.g. for "=", we get: {name} = {value}
+        :type comparison_operator: str
+        :param value: The value which is compared against
+        :type value: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        return self.where_multiple({name: value}, comparison_operator)
+
+    def where_multiple(self, filters: Properties, comparison_operator: str = "=", boolean_operator: str = ' AND '):
+        """Concatenate a WHERE clause to the query, created from a list of given property filters.
+
+        :param filters: A Properties object that represents the set of properties to be filtered
+        :type filters: Properties
+        :param comparison_operator: A string operator, according to which the comparison between property values is
+            done, e.g. for "=", we get: property.name = property.value, defaults to "="
+        :type comparison_operator: str
+        :param boolean_operator: The boolean operator to apply between predicates, defaults to ' AND '
+        :type boolean_operator: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
+        return WhereAvailable(self.query + filt)
+
+    def where_literal(self, statement: str):
+        """Concatenate a literal WHERE clause to the query.
+
+        :param statement: A literal string of the required filter
+        :type statement: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        filt = ' WHERE ' + statement
+        return WhereAvailable(self.query + filt)
 
 
 class With(Query):
@@ -540,8 +569,8 @@ class DeleteAvailable(Query):
     """A class decorator declares a Delete is available in the current query."""
 
 
-class WhereAvailable(Return, Delete, With, Where, OperatorStart, QueryStartAvailable):
-    """A class decorator declares a Where is available in the current query."""
+class LimitAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
+    """A class decorator declares a Limit is available in the current query."""
 
 
 class MatchAvailable(Node, Return, OperatorStart):
@@ -580,7 +609,7 @@ class RelationAvailable(Node):
     """A class decorator declares a Relation is available in the current query."""
 
 
-class ReturnAvailable(QueryStartAvailable, With, Unwind, Return):
+class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit):
     """A class decorator declares a Return is available in the current query."""
 
 
@@ -592,7 +621,11 @@ class UnwindAvailable(QueryStartAvailable, With, Unwind, Return):
     """A class decorator declares a Unwind is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return):
+class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStartAvailable):
+    """A class decorator declares a Where is available in the current query."""
+
+
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit):
     """A class decorator declares a With is available in the current query."""
 
 
