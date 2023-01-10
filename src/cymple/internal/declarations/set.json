@@ -6,8 +6,8 @@
       "docstring_summary": "Concatenate a SET clause, using the given properties map.",
       "args": {
         "properties": {
-          "type": "Properties",
-          "description": "The properties dictionary that will be used to set the properties with their corresponding values"
+          "type": "dict",
+          "description": "A dict to be used to set the variables with their corresponding values"
         }
       }
     }

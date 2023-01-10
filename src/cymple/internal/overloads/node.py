@@ -1,7 +1,7 @@
-from .typedefs import Properties
 
 
-def node(self, labels=None, ref_name: str = None, properties: Properties = None):
+
+def node(self, labels=None, ref_name: str = None, properties: dict = None):
     if not labels:
         labels_string = ''
     elif isinstance(labels, str):

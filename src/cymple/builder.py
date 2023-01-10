@@ -51,11 +51,11 @@ class Call(Query):
 class CaseWhen(Query):
     """A class for representing a "CASE WHEN" clause."""
 
-    def case_when(self, filters: Properties, on_true: str, on_false: str, ref_name: str, comparison_operator: str = "=", boolean_operator: str = "AND"):
+    def case_when(self, filters: dict, on_true: str, on_false: str, ref_name: str, comparison_operator: str = "=", boolean_operator: str = "AND"):
         """Concatenate a CASE WHEN clause to the query, created from a list of given property filters.
 
-        :param filters: A Properties object that represents the set of properties to be filtered
-        :type filters: Properties
+        :param filters: A dict representing the set of properties to be filtered
+        :type filters: dict
         :param on_true: The query to run when the predicate is true
         :type on_true: str
         :param on_false: The query to run when the predicate is false
@@ -156,16 +156,15 @@ class Merge(Query):
 class Node(Query):
     """A class for representing a "NODE" clause."""
 
-    def node(self, labels: List[str] = None, ref_name: str = None, properties: Properties = None):
+    def node(self, labels: List[str] = None, ref_name: str = None, properties: dict = None):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
         :type labels: List[str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the nodes are filtered,
-            defaults to None
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: NodeAvailable
@@ -196,16 +195,15 @@ class Node(Query):
 class NodeAfterMerge(Query):
     """A class for representing a "NODE AFTER MERGE" clause."""
 
-    def node(self, labels: List[str] = None, ref_name: str = None, properties: Properties = None):
+    def node(self, labels: List[str] = None, ref_name: str = None, properties: dict = None):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
         :type labels: List[str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the nodes are filtered,
-            defaults to None
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: NodeAfterMergeAvailable
@@ -272,7 +270,7 @@ class OperatorEnd(Query):
 class OperatorStart(Query):
     """A class for representing a "OPERATOR START" clause."""
 
-    def operator_start(self, operator: str, ref_name: str = None, args: Properties = None):
+    def operator_start(self, operator: str, ref_name: str = None, args: dict = None):
         """Concatenate an operator (e.g. ShortestPath), where its result may be given a name for future reference.
 
         :param operator: The neo4j operator to be used (e.g. ShortestPath)
@@ -280,7 +278,7 @@ class OperatorStart(Query):
         :param ref_name: A reference name of the result, to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param args: A string of arguments, to be passed to the operator function, defaults to None
-        :type args: Properties
+        :type args: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: OperatorStartAvailable
@@ -294,48 +292,48 @@ class OperatorStart(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: Properties = None):
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
         :type label: str
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the relationship is
-            filtered, defaults to None
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            None
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
         return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: Properties = {}):
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
         :type label: str
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the relationship is
-            filtered, defaults to {}
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
         return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: Properties = {}):
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
         :type label: str
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the relationship is
-            filtered, defaults to {}
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
@@ -366,7 +364,7 @@ class Relation(Query):
 
         return RelationAvailable(self.query + f'-{realtion_str}-')
 
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: Properties = {}):
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
@@ -375,9 +373,9 @@ class Relation(Query):
         :type label: str
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param properties: A Properties object that represents the set of properties by which the relationship is
-            filtered, defaults to {}
-        :type properties: Properties
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
@@ -439,12 +437,12 @@ class Return(Query):
 class Set(Query):
     """A class for representing a "SET" clause."""
 
-    def set(self, properties: Properties):
+    def set(self, properties: dict):
         """Concatenate a SET clause, using the given properties map.
 
         :param properties: The properties dictionary that will be used to set the properties with their corresponding
             values
-        :type properties: Properties
+        :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
         :rtype: SetAvailable
@@ -486,11 +484,11 @@ class Where(Query):
         """
         return self.where_multiple({name: value}, comparison_operator)
 
-    def where_multiple(self, filters: Properties, comparison_operator: str = "=", boolean_operator: str = ' AND '):
+    def where_multiple(self, filters: dict, comparison_operator: str = "=", boolean_operator: str = ' AND '):
         """Concatenate a WHERE clause to the query, created from a list of given property filters.
 
-        :param filters: A Properties object that represents the set of properties to be filtered
-        :type filters: Properties
+        :param filters: A dict representing the set of properties to be filtered
+        :type filters: dict
         :param comparison_operator: A string operator, according to which the comparison between property values is
             done, e.g. for "=", we get: property.name = property.value, defaults to "="
         :type comparison_operator: str
