@@ -104,55 +104,6 @@ class Delete(Query):
         return DeleteAvailable(self.query + ret)
 
 
-class Where(Query):
-    """A class for representing a "WHERE" clause."""
-
-    def where(self, name: str, comparison_operator: str, value: str):
-        """Concatenate a WHERE clause to the query, created as {name} {comparison_operator} {value}. E.g. x = 'abc'.
-
-        :param name: The name of the object which is to be used in the comparison
-        :type name: str
-        :param comparison_operator: A string operator, according to which the comparison between compared object and
-            the {value} is done, e.g. for "=", we get: {name} = {value}
-        :type comparison_operator: str
-        :param value: The value which is compared against
-        :type value: str
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: WhereAvailable
-        """
-        return self.where_multiple({name: value}, comparison_operator)
-
-    def where_multiple(self, filters: Properties, comparison_operator: str = "=", boolean_operator: str = ' AND '):
-        """Concatenate a WHERE clause to the query, created from a list of given property filters.
-
-        :param filters: A Properties object that represents the set of properties to be filtered
-        :type filters: Properties
-        :param comparison_operator: A string operator, according to which the comparison between property values is
-            done, e.g. for "=", we get: property.name = property.value, defaults to "="
-        :type comparison_operator: str
-        :param boolean_operator: The boolean operator to apply between predicates, defaults to ' AND '
-        :type boolean_operator: str
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: WhereAvailable
-        """
-        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
-        return WhereAvailable(self.query + filt)
-
-    def where_literal(self, statement: str):
-        """Concatenate a literal WHERE clause to the query.
-
-        :param statement: A literal string of the required filter
-        :type statement: str
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: WhereAvailable
-        """
-        filt = ' WHERE ' + statement
-        return WhereAvailable(self.query + filt)
-
-
 class Limit(Query):
     """A class for representing a "LIMIT" clause."""
 
@@ -516,6 +467,55 @@ class Unwind(Query):
         return UnwindAvailable(self.query + f' UNWIND {variables}')
 
 
+class Where(Query):
+    """A class for representing a "WHERE" clause."""
+
+    def where(self, name: str, comparison_operator: str, value: str):
+        """Concatenate a WHERE clause to the query, created as {name} {comparison_operator} {value}. E.g. x = 'abc'.
+
+        :param name: The name of the object which is to be used in the comparison
+        :type name: str
+        :param comparison_operator: A string operator, according to which the comparison between compared object and
+            the {value} is done, e.g. for "=", we get: {name} = {value}
+        :type comparison_operator: str
+        :param value: The value which is compared against
+        :type value: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        return self.where_multiple({name: value}, comparison_operator)
+
+    def where_multiple(self, filters: Properties, comparison_operator: str = "=", boolean_operator: str = ' AND '):
+        """Concatenate a WHERE clause to the query, created from a list of given property filters.
+
+        :param filters: A Properties object that represents the set of properties to be filtered
+        :type filters: Properties
+        :param comparison_operator: A string operator, according to which the comparison between property values is
+            done, e.g. for "=", we get: property.name = property.value, defaults to "="
+        :type comparison_operator: str
+        :param boolean_operator: The boolean operator to apply between predicates, defaults to ' AND '
+        :type boolean_operator: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
+        return WhereAvailable(self.query + filt)
+
+    def where_literal(self, statement: str):
+        """Concatenate a literal WHERE clause to the query.
+
+        :param statement: A literal string of the required filter
+        :type statement: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: WhereAvailable
+        """
+        filt = ' WHERE ' + statement
+        return WhereAvailable(self.query + filt)
+
+
 class With(Query):
     """A class for representing a "WITH" clause."""
 
@@ -569,10 +569,6 @@ class DeleteAvailable(Query):
     """A class decorator declares a Delete is available in the current query."""
 
 
-class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStartAvailable):
-    """A class decorator declares a Where is available in the current query."""
-
-
 class LimitAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
     """A class decorator declares a Limit is available in the current query."""
 
@@ -623,6 +619,10 @@ class SetAvailable(QueryStartAvailable, With, Unwind, Return):
 
 class UnwindAvailable(QueryStartAvailable, With, Unwind, Return):
     """A class decorator declares a Unwind is available in the current query."""
+
+
+class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStartAvailable):
+    """A class decorator declares a Where is available in the current query."""
 
 
 class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit):
