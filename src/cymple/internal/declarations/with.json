@@ -17,9 +17,9 @@
     "With", 
     "Unwind", 
     "Where", 
+    "Set",
     "CaseWhen", 
     "Return",
-    "Set",
     "Limit"
   ] 
 }

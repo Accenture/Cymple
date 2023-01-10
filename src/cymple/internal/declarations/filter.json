@@ -38,6 +38,16 @@
           "description": "The boolean operator to apply between predicates"
         }
       }
+    },
+    {
+      "name": "where_literal",
+      "docstring_summary": "Concatenate a literal WHERE clause to the query.",
+      "args": {
+        "statement": {
+          "type": "str",
+          "description": "A literal string of the required filter"
+        }
+      }
     }
   ],
   "successors": [
@@ -45,6 +55,7 @@
     "Delete", 
     "With", 
     "Where", 
+    "Set", 
     "OperatorStart", 
     "QueryStartAvailable"
   ] 
