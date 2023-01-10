@@ -6,8 +6,8 @@
       "docstring_summary": "Concatenate a CASE WHEN clause to the query, created from a list of given property filters.",
       "args": {
         "filters": {
-          "type": "Properties",
-          "description": "A Properties object that represents the set of properties to be filtered"
+          "type": "dict",
+          "description": "A dict representing the set of properties to be filtered"
         },
         "on_true": {
           "type": "str",

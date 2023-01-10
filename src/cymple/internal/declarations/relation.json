@@ -16,9 +16,9 @@
           "description": "A reference name to be used later in the rest of the query"
         },
         "properties": {
-          "type": "Properties",
+          "type": "dict",
           "default": "None",
-          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+          "description": "A dict representing the set of properties by which the relationship is filtered"
         }
       }
     },
@@ -37,9 +37,9 @@
           "description": "A reference name to be used later in the rest of the query"
         },
         "properties": {
-          "type": "Properties",
+          "type": "dict",
           "default": "{}",
-          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+          "description": "A dict representing the set of properties by which the relationship is filtered"
         }
       }
     },
@@ -58,9 +58,9 @@
           "description": "A reference name to be used later in the rest of the query"
         },
         "properties": {
-          "type": "Properties",
+          "type": "dict",
           "default": "{}",
-          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+          "description": "A dict representing the set of properties by which the relationship is filtered"
         }
       }
     },
@@ -98,9 +98,9 @@
           "description": "A reference name to be used later in the rest of the query"
         },
         "properties": {
-          "type": "Properties",
+          "type": "dict",
           "default": "{}",
-          "description": "A Properties object that represents the set of properties by which the relationship is filtered"
+          "description": "A dict representing the set of properties by which the relationship is filtered"
         }
       }
     }

@@ -15,9 +15,9 @@
           "description": "A reference name of the result, to be used later in the rest of the query"
         },
         "args": {
-          "type": "Properties",
+          "type": "dict",
           "default": "None",
-          "description": "A string of arguments, to be passed to the operator function"
+          "description": "A dict of arguments, to be passed to the operator function"
         }
       }
     }

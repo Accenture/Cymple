@@ -1,12 +1,12 @@
 from typing import Any
-from .typedefs import Properties
+
 
 
 def where_literal(self, statement: str):
     filt = ' WHERE ' + statement
     return WhereAvailable(self.query + filt)
 
-def where_multiple(self, filters: Properties, comparison_operator: str = '=', boolean_operator: str = ' AND '):
+def where_multiple(self, filters: dict, comparison_operator: str = '=', boolean_operator: str = ' AND '):
     filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
     return WhereAvailable(self.query + filt)
 

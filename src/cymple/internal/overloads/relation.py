@@ -1,7 +1,7 @@
-from .typedefs import Properties
 
 
-def related(self, label: str, ref_name: str = None, properties: Properties = None):
+
+def related(self, label: str, ref_name: str = None, properties: dict = None):
     return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
 
 
