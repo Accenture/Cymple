@@ -1,5 +1,4 @@
 import inspect
-import sys
 import pytest
 from cymple import QueryBuilder, builder
 
@@ -14,9 +13,10 @@ def test_any_available(clause, params):
     callables = [_callable for _callable in dir(getattr(qb.match(), clause)(*params))
                  if not _callable.startswith("__")]
     builder_classes = [_class for _class in inspect.getmembers(
-        sys.modules[builder.__name__],
+        builder,
         lambda member: inspect.isclass(member) and member.__module__ == builder.__name__
     ) if not _class[0].lower().endswith("available") and _class[0].lower() != "querybuilder"]
+    
     missing_callables = set()
     for _class in builder_classes:
         missing_callables.update([
