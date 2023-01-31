@@ -160,7 +160,7 @@ def render_builder_code():
                 decorators_output += add_decorators_output
                 all_clauses_titles.add(clause_name_title)
 
-    any_clause_decorator_output = f'class AnyAvailable({", ".join(all_clauses_titles)}):' + '\n    '
+    any_clause_decorator_output = f'class AnyAvailable({", ".join(sorted(all_clauses_titles))}):' + '\n    '
     any_clause_decorator_output += f'"""A class decorator declares anything is available in the current query."""' + '\n\n'
 
     with open(os.path.join(os.path.dirname(__file__), 'finale.py')) as file:
