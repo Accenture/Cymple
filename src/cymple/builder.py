@@ -31,6 +31,10 @@ class Query():
         """Get the final query string ."""
         return str(self)
 
+    def cypher(self, cypher_query_str):
+        """Concatenate a cypher query string"""
+        return AnyAvailable(self.query.strip() + ' ' + cypher_query_str.strip())
+
 
 class QueryStart(Query):
     """A class for representing a "QUERY START" clause."""
@@ -277,7 +281,7 @@ class OperatorStart(Query):
         :type operator: str
         :param ref_name: A reference name of the result, to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param args: A string of arguments, to be passed to the operator function, defaults to None
+        :param args: A dict of arguments, to be passed to the operator function, defaults to None
         :type args: dict
 
         :return: A Query object with a query that contains the new clause.
@@ -440,8 +444,7 @@ class Set(Query):
     def set(self, properties: dict):
         """Concatenate a SET clause, using the given properties map.
 
-        :param properties: The properties dictionary that will be used to set the properties with their corresponding
-            values
+        :param properties: A dict to be used to set the variables with their corresponding values
         :type properties: dict
 
         :return: A Query object with a query that contains the new clause.
@@ -629,6 +632,10 @@ class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Ret
 
 class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
+
+
+class AnyAvailable(Relation, Where, QueryStart, Call, Limit, Merge, Yield, Match, OnCreate, Node, NodeAfterMerge, Delete, With, Set, Unwind, OperatorStart, CaseWhen, OnMatch, OperatorEnd, Return):
+    """A class decorator declares anything is available in the current query."""
 
 
 class QueryBuilder(QueryStartAvailable):

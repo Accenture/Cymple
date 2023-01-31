@@ -1,4 +1,3 @@
-
 class Query():
     """A general query-descripting class ."""
 
@@ -22,3 +21,7 @@ class Query():
     def get(self):
         """Get the final query string ."""
         return str(self)
+
+    def cypher(self, cypher_query_str):
+        """Concatenate a cypher query string"""
+        return AnyAvailable(self.query.strip() + ' ' + cypher_query_str.strip())
