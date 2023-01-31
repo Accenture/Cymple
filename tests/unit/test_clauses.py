@@ -36,7 +36,8 @@ rendered = {
     'LIMIT': qb.reset().match().node(ref_name='n').return_literal('n').limit(1),
     'LIMIT (expression)': qb.reset().match().node(ref_name='n').return_literal('n').limit("1 + toInteger(3 * rand())"),
     'LIMIT (with)': qb.reset().match().node(ref_name='n').with_('n').limit(1),
-    'LIMIT (with set)': qb.reset().match().node(ref_name='n').with_('n').limit(1).set({'n.name': 'Bob'})
+    'LIMIT (with set)': qb.reset().match().node(ref_name='n').with_('n').limit(1).set({'n.name': 'Bob'}),
+    'CYPHER': qb.reset().match().node(ref_name='n').cypher("my cypher").limit(1)
 }
 
 expected = {
@@ -72,7 +73,8 @@ expected = {
     'LIMIT': 'MATCH (n) RETURN n LIMIT 1',
     'LIMIT (expression)': 'MATCH (n) RETURN n LIMIT 1 + toInteger(3 * rand())',
     'LIMIT (with)': 'MATCH (n) WITH n LIMIT 1',
-    'LIMIT (with set)': 'MATCH (n) WITH n LIMIT 1 SET n.name = "Bob"'
+    'LIMIT (with set)': 'MATCH (n) WITH n LIMIT 1 SET n.name = "Bob"',
+    'CYPHER': 'MATCH (n) my cypher LIMIT 1'
 }
 
 
