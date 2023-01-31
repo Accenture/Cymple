@@ -634,7 +634,7 @@ class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Relation, Where, QueryStart, Call, Limit, Merge, Yield, Match, OnCreate, Node, NodeAfterMerge, Delete, With, Set, Unwind, OperatorStart, CaseWhen, OnMatch, OperatorEnd, Return):
+class AnyAvailable(Call, CaseWhen, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, QueryStart, Relation, Return, Set, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 
