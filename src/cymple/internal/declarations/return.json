@@ -27,6 +27,7 @@
       "With", 
       "Unwind", 
       "Return",
-      "Limit"
+      "Limit",
+      "Skip"
     ] 
   }
