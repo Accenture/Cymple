@@ -435,6 +435,24 @@ class Relation(Query):
         return f'-{realtion_str}-'
 
 
+class Remove(Query):
+    """A class for representing a "REMOVE" clause."""
+
+    def remove(self, properties: Union[str, List[str]]):
+        """Concatenate a remove by statement.
+
+        :param properties: A string or a list of strings representing the properties to remove.
+        :type properties: Union[str, List[str]]
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RemoveAvailable
+        """
+        if type(properties) != list:
+            properties = [properties]
+        ret = f" REMOVE {', '.join(properties)}"
+        return RemoveAvailable(self.query + ret)
+
+
 class Return(Query):
     """A class for representing a "RETURN" clause."""
 
@@ -605,7 +623,7 @@ class Yield(Query):
         return YieldAvailable(self.query + query)
 
 
-class QueryStartAvailable(Match, Merge, Call, Create):
+class QueryStartAvailable(Match, Merge, Call, Create, Remove):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
@@ -637,7 +655,7 @@ class MergeAvailable(NodeAfterMerge, Return, OperatorStart):
     """A class decorator declares a Merge is available in the current query."""
 
 
-class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Create):
+class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Create, Remove):
     """A class decorator declares a Node is available in the current query."""
 
 
@@ -669,6 +687,10 @@ class RelationAvailable(Node):
     """A class decorator declares a Relation is available in the current query."""
 
 
+class RemoveAvailable(Return):
+    """A class decorator declares a Remove is available in the current query."""
+
+
 class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit, Skip, OrderBy):
     """A class decorator declares a Return is available in the current query."""
 
@@ -681,7 +703,7 @@ class SkipAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, 
     """A class decorator declares a Skip is available in the current query."""
 
 
-class UnwindAvailable(QueryStartAvailable, With, Unwind, Return, Create):
+class UnwindAvailable(QueryStartAvailable, With, Unwind, Return, Create, Remove):
     """A class decorator declares a Unwind is available in the current query."""
 
 
@@ -697,7 +719,7 @@ class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, Return, Set, Skip, Unwind, Where, With, Yield):
+class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, Remove, Return, Set, Skip, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 

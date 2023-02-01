@@ -33,6 +33,7 @@
     "OperatorEnd", 
     "Set", 
     "QueryStartAvailable",
-    "Create"
+    "Create",
+    "Remove"
   ] 
 }
