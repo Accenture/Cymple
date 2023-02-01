@@ -1,6 +1,5 @@
 import pytest
 from cymple import QueryBuilder
-from cymple.builder import ReferenceProperties
 
 qb = QueryBuilder()
 
@@ -43,11 +42,10 @@ rendered = {
     'SKIP (expression)': qb.reset().match().node(ref_name='n').return_literal('n').skip("1 + toInteger(3 * rand())"),
     'SKIP (with)': qb.reset().match().node(ref_name='n').with_('n').skip(1),
     'SKIP (with set)': qb.reset().match().node(ref_name='n').with_('n').skip(1).set({'n.name': 'Bob'}),
-    'ORDER BY (ReferenceProperties)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by(ReferenceProperties(reference='n', properties=['name'])),
-    'ORDER BY (expression)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)"),
+    'ORDER BY': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)"),
     'ORDER BY (List)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by(
-        [ReferenceProperties(reference='n', properties=['name', 'age']), "keys(n)"]),
-    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)", False),
+        ["n.name", "keys(n)"]),
+    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("n.name", False),
     'CREATE': qb.reset().create().node(ref_name='n').return_literal('n')
 
 }
@@ -91,10 +89,9 @@ expected = {
     'SKIP (expression)': 'MATCH (n) RETURN n SKIP 1 + toInteger(3 * rand())',
     'SKIP (with)': 'MATCH (n) WITH n SKIP 1',
     'SKIP (with set)': 'MATCH (n) WITH n SKIP 1 SET n.name = "Bob"',
-    'ORDER BY (ReferenceProperties)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name ASC',
-    'ORDER BY (expression)': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) ASC',
-    'ORDER BY (List)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name, n.age, keys(n) ASC',
-    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) DESC',
+    'ORDER BY': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) ASC',
+    'ORDER BY (List)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name, keys(n) ASC',
+    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name DESC',
     'CREATE': 'CREATE (n) RETURN n'
 }
 

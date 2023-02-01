@@ -4,7 +4,7 @@
 # pylint: disable=R0903
 # pylint: disable=W0102
 from typing import List, Union
-from .typedefs import Mapping, Properties, ReferenceProperties
+from .typedefs import Mapping, Properties
 
 
 class Query():
@@ -308,12 +308,11 @@ class OperatorStart(Query):
 class OrderBy(Query):
     """A class for representing a "ORDER BY" clause."""
 
-    def order_by(self, sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]], ascending: bool = True):
+    def order_by(self, sorting_properties: Union[str, List[str]], ascending: bool = True):
         """Concatenate an order by statement.
 
-        :param sorting_properties: A reference-properties object for the desired properties to sort by, a string of
-            cypher expression (that evaluates to a property) or a mixed list of them.
-        :type sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]]
+        :param sorting_properties: A string or a list of strings representing the properties based on which to sort.
+        :type sorting_properties: Union[str, List[str]]
         :param ascending: Use ascending sorting (if false, uses descending)., defaults to True
         :type ascending: bool
 
@@ -323,16 +322,7 @@ class OrderBy(Query):
         if type(sorting_properties) != list:
             sorting_properties = [sorting_properties]
 
-        properties_to_join = []
-
-        for sorting_property in sorting_properties:
-            if type(sorting_property) == ReferenceProperties:
-                for prop in sorting_property.properties:
-                    properties_to_join.append(f"{sorting_property.reference}.{prop}")
-            else:
-                properties_to_join.append(sorting_property)
-
-        ret = f" ORDER BY {', '.join(properties_to_join)}"
+        ret = f" ORDER BY {', '.join(sorting_properties)}"
         ret += " ASC" if ascending else " DESC"
         return OrderByAvailable(self.query + ret)
 
@@ -615,7 +605,7 @@ class Yield(Query):
         return YieldAvailable(self.query + query)
 
 
-class QueryStartAvailable(Match, Merge, Call, Create):
+class QueryStartAvailable(Match, Merge, Call):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
@@ -625,10 +615,6 @@ class CallAvailable(Node, Return, OperatorStart):
 
 class CaseWhenAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return):
     """A class decorator declares a CaseWhen is available in the current query."""
-
-
-class CreateAvailable(Node):
-    """A class decorator declares a Create is available in the current query."""
 
 
 class DeleteAvailable(Query):
@@ -647,7 +633,7 @@ class MergeAvailable(NodeAfterMerge, Return, OperatorStart):
     """A class decorator declares a Merge is available in the current query."""
 
 
-class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Create):
+class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable):
     """A class decorator declares a Node is available in the current query."""
 
 
@@ -707,7 +693,7 @@ class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, Return, Set, Skip, Unwind, Where, With, Yield):
+class AnyAvailable(Call, CaseWhen, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, Return, Set, Skip, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 
