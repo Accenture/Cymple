@@ -47,7 +47,8 @@ rendered = {
     'ORDER BY (expression)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)"),
     'ORDER BY (List)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by(
         [ReferenceProperties(reference='n', properties=['name', 'age']), "keys(n)"]),
-    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)", False)
+    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)", False),
+    'CREATE': qb.reset().create().node(ref_name='n').return_literal('n')
 
 }
 
@@ -93,7 +94,8 @@ expected = {
     'ORDER BY (ReferenceProperties)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name ASC',
     'ORDER BY (expression)': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) ASC',
     'ORDER BY (List)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name, n.age, keys(n) ASC',
-    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) DESC'
+    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) DESC',
+    'CREATE': 'CREATE (n) RETURN n'
 }
 
 

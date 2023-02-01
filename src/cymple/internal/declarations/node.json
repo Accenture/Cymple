@@ -32,6 +32,7 @@
     "OperatorStart", 
     "OperatorEnd", 
     "Set", 
-    "QueryStartAvailable"
+    "QueryStartAvailable",
+    "Create"
   ] 
 }

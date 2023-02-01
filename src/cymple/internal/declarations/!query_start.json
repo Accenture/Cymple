@@ -4,6 +4,7 @@
     "successors": [
       "Match",
       "Merge", 
-      "Call"
+      "Call",
+      "Create"
     ] 
   }
