@@ -6,8 +6,8 @@
       "docstring_summary": "Concatenate an order by statement",
       "args": {
         "sorting_properties": {
-          "type": "Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]]",
-          "description": "A reference-properties object for the desired properties to sort by, a string of cypher expression (that evaluates to a property) or a mixed list of them."
+          "type": "Union[str, List[str]]",
+          "description": "A string or a list of strings representing the properties based on which to sort."
         },
         "ascending": {
           "type": "bool",

@@ -4,7 +4,7 @@
 # pylint: disable=R0903
 # pylint: disable=W0102
 from typing import List, Union
-from .typedefs import Mapping, Properties, ReferenceProperties
+from .typedefs import Mapping, Properties
 
 
 class Query():
@@ -296,12 +296,11 @@ class OperatorStart(Query):
 class OrderBy(Query):
     """A class for representing a "ORDER BY" clause."""
 
-    def order_by(self, sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]], ascending: bool = True):
+    def order_by(self, sorting_properties: Union[str, List[str]], ascending: bool = True):
         """Concatenate an order by statement.
 
-        :param sorting_properties: A reference-properties object for the desired properties to sort by, a string of
-            cypher expression (that evaluates to a property) or a mixed list of them.
-        :type sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]]
+        :param sorting_properties: A string or a list of strings representing the properties based on which to sort.
+        :type sorting_properties: Union[str, List[str]]
         :param ascending: Use ascending sorting (if false, uses descending)., defaults to True
         :type ascending: bool
 
@@ -311,16 +310,7 @@ class OrderBy(Query):
         if type(sorting_properties) != list:
             sorting_properties = [sorting_properties]
 
-        properties_to_join = []
-
-        for sorting_property in sorting_properties:
-            if type(sorting_property) == ReferenceProperties:
-                for prop in sorting_property.properties:
-                    properties_to_join.append(f"{sorting_property.reference}.{prop}")
-            else:
-                properties_to_join.append(sorting_property)
-
-        ret = f" ORDER BY {', '.join(properties_to_join)}"
+        ret = f" ORDER BY {', '.join(sorting_properties)}"
         ret += " ASC" if ascending else " DESC"
         return OrderByAvailable(self.query + ret)
 
