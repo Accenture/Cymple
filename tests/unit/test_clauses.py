@@ -46,7 +46,9 @@ rendered = {
     'ORDER BY (List)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by(
         ["n.name", "keys(n)"]),
     'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("n.name", False),
-    'CREATE': qb.reset().create().node(ref_name='n').return_literal('n')
+    'CREATE': qb.reset().create().node(ref_name='n').return_literal('n'),
+    'REMOVE': qb.reset().match().node(ref_name='n').remove('n.name').return_literal('n.age, n.name'),
+    'REMOVE (list)': qb.reset().match().node(ref_name='n').remove(['n.age', 'n.name']).return_literal('n.age, n.name')
 
 }
 
@@ -92,7 +94,9 @@ expected = {
     'ORDER BY': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) ASC',
     'ORDER BY (List)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name, keys(n) ASC',
     'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name DESC',
-    'CREATE': 'CREATE (n) RETURN n'
+    'CREATE': 'CREATE (n) RETURN n',
+    'REMOVE': 'MATCH (n) REMOVE n.name RETURN n.age, n.name',
+    'REMOVE (list)': 'MATCH (n) REMOVE n.age, n.name RETURN n.age, n.name'
 }
 
 

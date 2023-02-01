@@ -17,6 +17,7 @@
     "With", 
     "Unwind", 
     "Return",
-    "Create"
+    "Create",
+    "Remove"
   ] 
 }
