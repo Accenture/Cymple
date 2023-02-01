@@ -21,6 +21,7 @@
     "CaseWhen", 
     "Return",
     "Limit",
-    "Skip"
+    "Skip",
+    "OrderBy"
   ] 
 }

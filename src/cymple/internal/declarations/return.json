@@ -28,6 +28,7 @@
       "Unwind", 
       "Return",
       "Limit",
-      "Skip"
+      "Skip",
+      "OrderBy"
     ] 
   }

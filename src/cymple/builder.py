@@ -4,7 +4,7 @@
 # pylint: disable=R0903
 # pylint: disable=W0102
 from typing import List, Union
-from .typedefs import Mapping, Properties
+from .typedefs import Mapping, Properties, ReferenceProperties
 
 
 class Query():
@@ -291,6 +291,38 @@ class OperatorStart(Query):
         arguments = '' if args is None else f' {args}'
 
         return OperatorStartAvailable(self.query + f' {result_name}{operator}({arguments}')
+
+
+class OrderBy(Query):
+    """A class for representing a "ORDER BY" clause."""
+
+    def order_by(self, sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]], ascending: bool = True):
+        """Concatenate an order by statement.
+
+        :param sorting_properties: A reference-properties object for the desired properties to sort by, a string of
+            cypher expression (that evaluates to a property) or a mixed list of them.
+        :type sorting_properties: Union[ReferenceProperties, str, List[Union[ReferenceProperties, str]]]
+        :param ascending: Use ascending sorting (if false, uses descending)., defaults to True
+        :type ascending: bool
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: OrderByAvailable
+        """
+        if type(sorting_properties) != list:
+            sorting_properties = [sorting_properties]
+
+        properties_to_join = []
+
+        for sorting_property in sorting_properties:
+            if type(sorting_property) == ReferenceProperties:
+                for prop in sorting_property.properties:
+                    properties_to_join.append(f"{sorting_property.reference}.{prop}")
+            else:
+                properties_to_join.append(sorting_property)
+
+        ret = f" ORDER BY {', '.join(properties_to_join)}"
+        ret += " ASC" if ascending else " DESC"
+        return OrderByAvailable(self.query + ret)
 
 
 class Relation(Query):
@@ -623,11 +655,15 @@ class OperatorStartAvailable(QueryStartAvailable, Node, With, OperatorEnd):
     """A class decorator declares a OperatorStart is available in the current query."""
 
 
+class OrderByAvailable(Limit, Skip):
+    """A class decorator declares a OrderBy is available in the current query."""
+
+
 class RelationAvailable(Node):
     """A class decorator declares a Relation is available in the current query."""
 
 
-class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit, Skip):
+class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit, Skip, OrderBy):
     """A class decorator declares a Return is available in the current query."""
 
 
@@ -647,7 +683,7 @@ class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStart
     """A class decorator declares a Where is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit, Skip):
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit, Skip, OrderBy):
     """A class decorator declares a With is available in the current query."""
 
 
@@ -655,7 +691,7 @@ class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, CaseWhen, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, QueryStart, Relation, Return, Set, Skip, Unwind, Where, With, Yield):
+class AnyAvailable(Call, CaseWhen, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, Return, Set, Skip, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 
