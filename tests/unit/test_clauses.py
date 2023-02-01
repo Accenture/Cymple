@@ -45,7 +45,8 @@ rendered = {
     'ORDER BY': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("elementId(n)"),
     'ORDER BY (List)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by(
         ["n.name", "keys(n)"]),
-    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("n.name", False)
+    'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("n.name", False),
+    'CREATE': qb.reset().create().node(ref_name='n').return_literal('n')
 
 }
 
@@ -90,7 +91,8 @@ expected = {
     'SKIP (with set)': 'MATCH (n) WITH n SKIP 1 SET n.name = "Bob"',
     'ORDER BY': 'MATCH (n) RETURN n.name, n.age ORDER BY elementId(n) ASC',
     'ORDER BY (List)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name, keys(n) ASC',
-    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name DESC'
+    'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name DESC',
+    'CREATE': 'CREATE (n) RETURN n'
 }
 
 
