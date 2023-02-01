@@ -34,9 +34,3 @@ class Properties(dict):
 
     def __str__(self) -> str:
         return self.to_str()
-
-
-@dataclass
-class ReferenceProperties:
-    reference: str
-    properties: List[str]
