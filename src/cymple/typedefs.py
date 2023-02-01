@@ -1,6 +1,7 @@
 """Cymple's API type definitions."""
 from collections import namedtuple
-from typing import Any
+from typing import Any, List
+from dataclasses import dataclass
 
 Mapping = namedtuple('Mapping', ['ref_name', 'returned_name'], defaults=(None, None))
 
@@ -33,3 +34,9 @@ class Properties(dict):
 
     def __str__(self) -> str:
         return self.to_str()
+
+
+@dataclass
+class ReferenceProperties:
+    reference: str
+    properties: List[str]
