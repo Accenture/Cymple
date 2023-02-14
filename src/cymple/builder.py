@@ -631,7 +631,7 @@ class CallAvailable(Node, Return, OperatorStart):
     """A class decorator declares a Call is available in the current query."""
 
 
-class CaseWhenAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return):
+class CaseWhenAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
     """A class decorator declares a CaseWhen is available in the current query."""
 
 
@@ -639,7 +639,7 @@ class CreateAvailable(Node):
     """A class decorator declares a Create is available in the current query."""
 
 
-class DeleteAvailable(Query):
+class DeleteAvailable(Return, CaseWhen):
     """A class decorator declares a Delete is available in the current query."""
 
 
