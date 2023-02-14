@@ -23,6 +23,7 @@
     }
   ],
   "successors": [
-    "Query"
+    "Return",
+    "CaseWhen"
   ] 
 }
