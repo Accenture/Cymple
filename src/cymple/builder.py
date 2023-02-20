@@ -607,16 +607,18 @@ class Return(Query):
 class Set(Query):
     """A class for representing a "SET" clause."""
 
-    def set(self, properties: dict):
+    def set(self, properties: dict, escape_values: bool = True):
         """Concatenate a SET clause, using the given properties map.
 
         :param properties: A dict to be used to set the variables with their corresponding values
         :type properties: dict
+        :param escape_values: Determines whether the properties values should be escaped or not, defaults to True
+        :type escape_values: bool
 
         :return: A Query object with a query that contains the new clause.
         :rtype: SetAvailable
         """
-        query = self.query + ' SET ' + Properties(properties).to_str("=", ", ")
+        query = self.query + ' SET ' + Properties(properties).to_str("=", ", ", escape_values)
 
         if isinstance(self, NodeAfterMergeAvailable) or isinstance(self, OnCreateAvailable) or isinstance(self, OnMatchAvailable) or isinstance(self, SetAfterMergeAvailable):
             return SetAfterMergeAvailable(query)
