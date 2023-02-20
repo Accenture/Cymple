@@ -1,0 +1,111 @@
+{
+  "clause_name": "RELATION AFTER MERGE",
+  "methods": [
+    {
+      "name": "related",
+      "docstring_summary": "Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "dict",
+          "default": "None",
+          "description": "A dict representing the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_to",
+      "docstring_summary": "Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "dict",
+          "default": "{}",
+          "description": "A dict representing the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_from",
+      "docstring_summary": "Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.",
+      "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "dict",
+          "default": "{}",
+          "description": "A dict representing the set of properties by which the relationship is filtered"
+        }
+      }
+    },
+    {
+      "name": "related_variable_len",
+      "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable path length.",
+      "args": {
+        "min_hops": {
+          "type": "int",
+          "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
+          "default": "-1"
+        },
+        "max_hops": {
+          "type": "int",
+          "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
+          "default": "-1"
+        }
+      }
+    },
+    {
+      "name": "_directed_relation",
+      "docstring_summary": "Concatenate a graph Relationship (private method).",
+      "args": {
+        "direction": {
+          "type": "str",
+          "description": "The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional"
+        },
+        "label": {
+          "type": "str",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
+        "properties": {
+          "type": "dict",
+          "default": "{}",
+          "description": "A dict representing the set of properties by which the relationship is filtered"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "NodeAfterMerge"
+  ] 
+}

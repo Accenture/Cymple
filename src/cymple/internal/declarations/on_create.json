@@ -1,7 +1,7 @@
 {
   "clause_name": "ON CREATE",
   "successors": [
-    "Set",
+    "SetAfterMerge",
     "OperatorStart"
   ]
 }
