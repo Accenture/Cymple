@@ -1,0 +1,29 @@
+{
+  "clause_name": "SET AFTER MERGE",
+  "methods": [
+    {
+      "name": "set",
+      "docstring_summary": "Concatenate a SET clause, using the given properties map.",
+      "args": {
+        "properties": {
+          "type": "dict",
+          "description": "A dict to be used to set the variables with their corresponding values"
+        },
+        "escape_values": {
+          "type": "bool",
+          "default": "True",
+          "description": "Determines whether the properties values should be escaped or not"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable", 
+    "OnCreate",
+    "OnMatch",
+    "With", 
+    "SetAfterMerge", 
+    "Unwind", 
+    "Return"
+  ] 
+}
