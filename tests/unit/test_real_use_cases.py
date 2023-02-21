@@ -378,6 +378,4 @@ def test_cypher_set_unescaped_after_merge():
              .return_literal('n')
              .get())
 
-    print(expected_query)
-
     assert actual_query == expected_query
