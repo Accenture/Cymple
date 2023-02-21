@@ -20,6 +20,7 @@
     "CaseWhen",
     "Return",
     "Set",
+    "Remove",
     "Limit"
   ]
 }
