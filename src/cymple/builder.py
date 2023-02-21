@@ -766,7 +766,7 @@ class Yield(Query):
         return YieldAvailable(self.query + query)
 
 
-class QueryStartAvailable(Match, Merge, Call, Create, Remove):
+class QueryStartAvailable(Match, Merge, Call, Create):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
@@ -834,7 +834,7 @@ class RelationAfterMergeAvailable(NodeAfterMerge):
     """A class decorator declares a RelationAfterMerge is available in the current query."""
 
 
-class RemoveAvailable(Return):
+class RemoveAvailable(Set, Return):
     """A class decorator declares a Remove is available in the current query."""
 
 
@@ -842,7 +842,7 @@ class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit, Skip, Or
     """A class decorator declares a Return is available in the current query."""
 
 
-class SetAvailable(QueryStartAvailable, With, Set, Unwind, Return):
+class SetAvailable(QueryStartAvailable, With, Set, Remove, Unwind, Return):
     """A class decorator declares a Set is available in the current query."""
 
 
@@ -850,7 +850,7 @@ class SetAfterMergeAvailable(QueryStartAvailable, OnCreate, OnMatch, With, SetAf
     """A class decorator declares a SetAfterMerge is available in the current query."""
 
 
-class SkipAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set, Limit):
+class SkipAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set, Remove, Limit):
     """A class decorator declares a Skip is available in the current query."""
 
 
@@ -858,11 +858,11 @@ class UnwindAvailable(QueryStartAvailable, With, Unwind, Return, Create, Remove)
     """A class decorator declares a Unwind is available in the current query."""
 
 
-class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStartAvailable):
+class WhereAvailable(Return, Delete, With, Where, Set, Remove, OperatorStart, QueryStartAvailable):
     """A class decorator declares a Where is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit, Skip, OrderBy):
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, Remove, CaseWhen, Return, Limit, Skip, OrderBy):
     """A class decorator declares a With is available in the current query."""
 
 
