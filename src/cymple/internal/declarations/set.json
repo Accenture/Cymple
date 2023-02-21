@@ -8,6 +8,11 @@
         "properties": {
           "type": "dict",
           "description": "A dict to be used to set the variables with their corresponding values"
+        },
+        "escape_values": {
+          "type": "bool",
+          "default": "True",
+          "description": "Determines whether the properties values should be escaped or not"
         }
       }
     }
@@ -15,6 +20,8 @@
   "successors": [
     "QueryStartAvailable", 
     "With", 
+    "Set", 
+    "Remove", 
     "Unwind", 
     "Return"
   ] 

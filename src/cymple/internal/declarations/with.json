@@ -18,8 +18,11 @@
     "Unwind", 
     "Where", 
     "Set",
+    "Remove",
     "CaseWhen", 
     "Return",
-    "Limit"
+    "Limit",
+    "Skip",
+    "OrderBy"
   ] 
 }

@@ -24,14 +24,13 @@
     }
   ],
   "successors": [
-    "Relation",
+    "RelationAfterMerge",
     "Return", 
     "Delete", 
     "With", 
-    "Where", 
     "OperatorStart", 
     "OperatorEnd", 
-    "Set", 
+    "SetAfterMerge", 
     "OnCreate",
     "OnMatch",
     "QueryStartAvailable"

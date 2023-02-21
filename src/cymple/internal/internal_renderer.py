@@ -129,7 +129,7 @@ def _render_clause(declaration: dict):
 
     main_output = '\n'.join(new_lines)
 
-    return main_output, decorators_output
+    return main_output, decorators_output, clause_name_title
 
 
 def render_builder_code():
@@ -144,15 +144,24 @@ def render_builder_code():
 
     decorators_output = '\n'
 
-    for file in os.listdir(os.path.join(os.path.dirname(__file__), 'declarations')):
+    all_clauses_titles = set()
+
+    declarations_fps = os.listdir(os.path.join(os.path.dirname(__file__), 'declarations'))
+    declarations_fps.sort()
+
+    for file in declarations_fps:
         if file.endswith('.json'):
             path = os.path.join(os.path.dirname(__file__), 'declarations', file)
 
             with open(path) as file:
                 declaration = json.load(file)
-                add_clause_output, add_decorators_output = _render_clause(declaration)
+                add_clause_output, add_decorators_output, clause_name_title = _render_clause(declaration)
                 clauses_output += add_clause_output
                 decorators_output += add_decorators_output
+                all_clauses_titles.add(clause_name_title)
+
+    any_clause_decorator_output = f'class AnyAvailable({", ".join(sorted(all_clauses_titles))}):' + '\n    '
+    any_clause_decorator_output += f'"""A class decorator declares anything is available in the current query."""' + '\n\n'
 
     with open(os.path.join(os.path.dirname(__file__), 'finale.py')) as file:
         finale_output = file.read()
@@ -160,6 +169,7 @@ def render_builder_code():
     with open(os.path.join(os.path.dirname(__file__), '../builder.py'), 'w+') as file:
         file.write(clauses_output)
         file.write(decorators_output)
+        file.write(any_clause_decorator_output)
         file.write(finale_output)
 
     builder_path = os.path.join(pathlib.Path(__file__).parent.parent.resolve(), "builder.py")

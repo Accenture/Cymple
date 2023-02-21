@@ -32,6 +32,8 @@
     "OperatorStart", 
     "OperatorEnd", 
     "Set", 
-    "QueryStartAvailable"
+    "QueryStartAvailable",
+    "Merge",
+    "Remove"
   ] 
 }

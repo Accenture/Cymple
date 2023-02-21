@@ -360,3 +360,22 @@ def test_cypher_query_add():
     actual_query1 += actual_query2
     actual_query = str(actual_query1)
     assert actual_query == expected_query
+
+def test_cypher_set_unescaped_after_merge():
+    node_id = '1'
+
+    expected_query = (
+        f'MERGE (n: Node {{name : "test"}}) '
+        f'ON CREATE SET n.id = "{node_id}" '
+        f'ON MATCH SET n.id = n.id + "1" '
+        f'RETURN n')
+
+    actual_query = (QueryBuilder()
+             .merge()
+             .node('Node', 'n', {'name': 'test'})
+             .on_create().set({f'n.id': node_id})
+             .on_match().set({f'n.id': f'n.id + "1"'}, escape_values=False)
+             .return_literal('n')
+             .get())
+
+    assert actual_query == expected_query

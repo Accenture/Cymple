@@ -1,0 +1,24 @@
+ {
+  "clause_name": "ORDER BY",
+  "methods": [
+    {
+      "name": "order_by",
+      "docstring_summary": "Concatenate an order by statement",
+      "args": {
+        "sorting_properties": {
+          "type": "Union[str, List[str]]",
+          "description": "A string or a list of strings representing the properties based on which to sort."
+        },
+        "ascending": {
+          "type": "bool",
+          "description": "Use ascending sorting (if false, uses descending).",
+          "default": "True"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "Limit",
+    "Skip"
+  ]
+}

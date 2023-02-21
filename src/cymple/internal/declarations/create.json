@@ -1,0 +1,6 @@
+{
+  "clause_name": "CREATE",
+  "successors": [
+    "Node"
+  ]
+}

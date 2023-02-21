@@ -16,10 +16,13 @@ def node(self, labels=None, ref_name: str = None, properties: dict = None):
 
     ref_name = ref_name or ''
 
-    if not (self.query.endswith('-') or self.query.endswith('>') or self.query.endswith('<')):
-        self.query += ' '
+    query = self.query
+    if not (query.endswith('-') or query.endswith('>') or query.endswith('<')):
+        query += ' '
 
+    query += f'({ref_name}{labels_string}{property_string})'
+    
     if isinstance(self, MergeAvailable):
-        return NodeAfterMergeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+        return NodeAfterMergeAvailable(query)
 
-    return NodeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+    return NodeAvailable(query)

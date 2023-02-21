@@ -1,11 +1,11 @@
  {
-  "clause_name": "LIMIT",
+  "clause_name": "SKIP",
   "methods": [
     {
-      "name": "limit",
-      "docstring_summary": "Concatenate a limit statement",
+      "name": "skip",
+      "docstring_summary": "Concatenate a skip statement",
       "args": {
-        "limitation": {
+        "skip_count": {
           "type": "Union[int, str]",
           "description": "A non-negative integer or a string of cypher expression that evaluates to a non-negative integer (as long as it is not referring to any external variables)"
         }
@@ -20,6 +20,7 @@
     "CaseWhen",
     "Return",
     "Set",
-    "Skip"
+    "Remove",
+    "Limit"
   ]
 }

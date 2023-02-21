@@ -1,0 +1,19 @@
+{
+  "clause_name": "REMOVE",
+  "methods": [
+    {
+      "name": "remove",
+      "docstring_summary": "Concatenate a remove by statement",
+      "args": {
+        "properties": {
+          "type": "Union[str, List[str]]",
+          "description": "A string or a list of strings representing the properties to remove."
+        }
+      }
+    }
+  ],
+  "successors": [
+    "Set",
+    "Return"
+  ]
+}

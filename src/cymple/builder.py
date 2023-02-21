@@ -31,6 +31,10 @@ class Query():
         """Get the final query string ."""
         return str(self)
 
+    def cypher(self, cypher_query_str):
+        """Concatenate a cypher query string"""
+        return AnyAvailable(self.query.strip() + ' ' + cypher_query_str.strip())
+
 
 class QueryStart(Query):
     """A class for representing a "QUERY START" clause."""
@@ -74,6 +78,18 @@ class CaseWhen(Query):
         filt = ' CASE WHEN ' + Properties(filters).to_str(comparison_operator, boolean_operator)
         filt += f' THEN {on_true} ELSE {on_false} END as {ref_name}'
         return CaseWhenAvailable(self.query + filt)
+
+
+class Create(Query):
+    """A class for representing a "CREATE" clause."""
+
+    def create(self):
+        """Concatenate the "CREATE" clause.
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: CreateAvailable
+        """
+        return CreateAvailable(self.query + ' CREATE')
 
 
 class Delete(Query):
@@ -183,13 +199,16 @@ class Node(Query):
 
         ref_name = ref_name or ''
 
-        if not (self.query.endswith('-') or self.query.endswith('>') or self.query.endswith('<')):
-            self.query += ' '
+        query = self.query
+        if not (query.endswith('-') or query.endswith('>') or query.endswith('<')):
+            query += ' '
+
+        query += f'({ref_name}{labels_string}{property_string})'
 
         if isinstance(self, MergeAvailable):
-            return NodeAfterMergeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+            return NodeAfterMergeAvailable(query)
 
-        return NodeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+        return NodeAvailable(query)
 
 
 class NodeAfterMerge(Query):
@@ -222,13 +241,16 @@ class NodeAfterMerge(Query):
 
         ref_name = ref_name or ''
 
-        if not (self.query.endswith('-') or self.query.endswith('>') or self.query.endswith('<')):
-            self.query += ' '
+        query = self.query
+        if not (query.endswith('-') or query.endswith('>') or query.endswith('<')):
+            query += ' '
+
+        query += f'({ref_name}{labels_string}{property_string})'
 
         if isinstance(self, MergeAvailable):
-            return NodeAfterMergeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+            return NodeAfterMergeAvailable(query)
 
-        return NodeAvailable(self.query + f'({ref_name}{labels_string}{property_string})')
+        return NodeAvailable(query)
 
 
 class OnCreate(Query):
@@ -277,7 +299,7 @@ class OperatorStart(Query):
         :type operator: str
         :param ref_name: A reference name of the result, to be used later in the rest of the query, defaults to None
         :type ref_name: str
-        :param args: A string of arguments, to be passed to the operator function, defaults to None
+        :param args: A dict of arguments, to be passed to the operator function, defaults to None
         :type args: dict
 
         :return: A Query object with a query that contains the new clause.
@@ -287,6 +309,28 @@ class OperatorStart(Query):
         arguments = '' if args is None else f' {args}'
 
         return OperatorStartAvailable(self.query + f' {result_name}{operator}({arguments}')
+
+
+class OrderBy(Query):
+    """A class for representing a "ORDER BY" clause."""
+
+    def order_by(self, sorting_properties: Union[str, List[str]], ascending: bool = True):
+        """Concatenate an order by statement.
+
+        :param sorting_properties: A string or a list of strings representing the properties based on which to sort.
+        :type sorting_properties: Union[str, List[str]]
+        :param ascending: Use ascending sorting (if false, uses descending)., defaults to True
+        :type ascending: bool
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: OrderByAvailable
+        """
+        if type(sorting_properties) != list:
+            sorting_properties = [sorting_properties]
+
+        ret = f" ORDER BY {', '.join(sorting_properties)}"
+        ret += " ASC" if ascending else " DESC"
+        return OrderByAvailable(self.query + ret)
 
 
 class Relation(Query):
@@ -397,6 +441,132 @@ class Relation(Query):
         return f'-{realtion_str}-'
 
 
+class RelationAfterMerge(Query):
+    """A class for representing a "RELATION AFTER MERGE" clause."""
+
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None):
+        """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
+
+        :param label: The relationship label (type) in the DB, defaults to None
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            None
+        :type properties: dict
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RelationAfterMergeAvailable
+        """
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
+
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}):
+        """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
+
+        :param label: The relationship label (type) in the DB, defaults to None
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RelationAfterMergeAvailable
+        """
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties))
+
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}):
+        """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
+
+        :param label: The relationship label (type) in the DB, defaults to None
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RelationAfterMergeAvailable
+        """
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
+
+    def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
+        """Concatenate a uni-directional graph Relationship, with a variable path length.
+
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1
+        :type max_hops: int
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RelationAfterMergeAvailable
+        """
+        min_hops_str = '' if min_hops == -1 else str(min_hops)
+        max_hops_str = '' if max_hops == -1 else str(max_hops)
+
+        relation_length = '*' if min_hops == -1 and max_hops == - \
+            1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
+
+        if relation_length:
+            realtion_str = f'[{relation_length}]'
+        else:
+            realtion_str = ''
+
+        return RelationAvailable(self.query + f'-{realtion_str}-')
+
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}):
+        """Concatenate a graph Relationship (private method).
+
+        :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
+        :type direction: str
+        :param label: The relationship label (type) in the DB
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
+        :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
+            {}
+        :type properties: dict
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RelationAfterMergeAvailable
+        """
+        relation_type = '' if label is None else f': {label}'
+        relation_ref_name = '' if ref_name is None else f'{ref_name}'
+        relation_properties = f' {{{str(Properties(properties))}}}' if properties else ''
+
+        if relation_ref_name or relation_type:
+            realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'
+        else:
+            realtion_str = ''
+
+        if direction == 'forward':
+            return f'-{realtion_str}->'
+        if direction == 'backward':
+            return f'<-{realtion_str}-'
+
+        return f'-{realtion_str}-'
+
+
+class Remove(Query):
+    """A class for representing a "REMOVE" clause."""
+
+    def remove(self, properties: Union[str, List[str]]):
+        """Concatenate a remove by statement.
+
+        :param properties: A string or a list of strings representing the properties to remove.
+        :type properties: Union[str, List[str]]
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: RemoveAvailable
+        """
+        if type(properties) != list:
+            properties = [properties]
+        ret = f" REMOVE {', '.join(properties)}"
+        return RemoveAvailable(self.query + ret)
+
+
 class Return(Query):
     """A class for representing a "RETURN" clause."""
 
@@ -437,17 +607,62 @@ class Return(Query):
 class Set(Query):
     """A class for representing a "SET" clause."""
 
-    def set(self, properties: dict):
+    def set(self, properties: dict, escape_values: bool = True):
         """Concatenate a SET clause, using the given properties map.
 
-        :param properties: The properties dictionary that will be used to set the properties with their corresponding
-            values
+        :param properties: A dict to be used to set the variables with their corresponding values
         :type properties: dict
+        :param escape_values: Determines whether the properties values should be escaped or not, defaults to True
+        :type escape_values: bool
 
         :return: A Query object with a query that contains the new clause.
         :rtype: SetAvailable
         """
-        return SetAvailable(self.query + ' SET ' + Properties(properties).to_str("=", ", "))
+        query = self.query + ' SET ' + Properties(properties).to_str("=", ", ", escape_values)
+
+        if isinstance(self, NodeAfterMergeAvailable) or isinstance(self, OnCreateAvailable) or isinstance(self, OnMatchAvailable) or isinstance(self, SetAfterMergeAvailable):
+            return SetAfterMergeAvailable(query)
+
+        return SetAvailable(query)
+
+
+class SetAfterMerge(Query):
+    """A class for representing a "SET AFTER MERGE" clause."""
+
+    def set(self, properties: dict, escape_values: bool = True):
+        """Concatenate a SET clause, using the given properties map.
+
+        :param properties: A dict to be used to set the variables with their corresponding values
+        :type properties: dict
+        :param escape_values: Determines whether the properties values should be escaped or not, defaults to True
+        :type escape_values: bool
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: SetAfterMergeAvailable
+        """
+        query = self.query + ' SET ' + Properties(properties).to_str("=", ", ", escape_values)
+
+        if isinstance(self, NodeAfterMergeAvailable) or isinstance(self, OnCreateAvailable) or isinstance(self, OnMatchAvailable) or isinstance(self, SetAfterMergeAvailable):
+            return SetAfterMergeAvailable(query)
+
+        return SetAvailable(query)
+
+
+class Skip(Query):
+    """A class for representing a "SKIP" clause."""
+
+    def skip(self, skip_count: Union[int, str]):
+        """Concatenate a skip statement.
+
+        :param skip_count: A non-negative integer or a string of cypher expression that evaluates to a non-negative
+            integer (as long as it is not referring to any external variables)
+        :type skip_count: Union[int, str]
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: SkipAvailable
+        """
+        ret = f" SKIP {skip_count}"
+        return SkipAvailable(self.query + ret)
 
 
 class Unwind(Query):
@@ -551,7 +766,7 @@ class Yield(Query):
         return YieldAvailable(self.query + query)
 
 
-class QueryStartAvailable(Match, Merge, Call):
+class QueryStartAvailable(Match, Merge, Call, Create):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
@@ -559,15 +774,19 @@ class CallAvailable(Node, Return, OperatorStart):
     """A class decorator declares a Call is available in the current query."""
 
 
-class CaseWhenAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return):
+class CaseWhenAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
     """A class decorator declares a CaseWhen is available in the current query."""
 
 
-class DeleteAvailable(Query):
+class CreateAvailable(Node):
+    """A class decorator declares a Create is available in the current query."""
+
+
+class DeleteAvailable(Return, CaseWhen):
     """A class decorator declares a Delete is available in the current query."""
 
 
-class LimitAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set):
+class LimitAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set, Skip):
     """A class decorator declares a Limit is available in the current query."""
 
 
@@ -579,19 +798,19 @@ class MergeAvailable(NodeAfterMerge, Return, OperatorStart):
     """A class decorator declares a Merge is available in the current query."""
 
 
-class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable):
+class NodeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Merge, Remove):
     """A class decorator declares a Node is available in the current query."""
 
 
-class NodeAfterMergeAvailable(Relation, Return, Delete, With, Where, OperatorStart, OperatorEnd, Set, OnCreate, OnMatch, QueryStartAvailable):
+class NodeAfterMergeAvailable(RelationAfterMerge, Return, Delete, With, OperatorStart, OperatorEnd, SetAfterMerge, OnCreate, OnMatch, QueryStartAvailable):
     """A class decorator declares a NodeAfterMerge is available in the current query."""
 
 
-class OnCreateAvailable(Set, OperatorStart):
+class OnCreateAvailable(SetAfterMerge, OperatorStart):
     """A class decorator declares a OnCreate is available in the current query."""
 
 
-class OnMatchAvailable(Set, OperatorStart):
+class OnMatchAvailable(SetAfterMerge, OperatorStart):
     """A class decorator declares a OnMatch is available in the current query."""
 
 
@@ -603,32 +822,56 @@ class OperatorStartAvailable(QueryStartAvailable, Node, With, OperatorEnd):
     """A class decorator declares a OperatorStart is available in the current query."""
 
 
+class OrderByAvailable(Limit, Skip):
+    """A class decorator declares a OrderBy is available in the current query."""
+
+
 class RelationAvailable(Node):
     """A class decorator declares a Relation is available in the current query."""
 
 
-class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit):
+class RelationAfterMergeAvailable(NodeAfterMerge):
+    """A class decorator declares a RelationAfterMerge is available in the current query."""
+
+
+class RemoveAvailable(Set, Return):
+    """A class decorator declares a Remove is available in the current query."""
+
+
+class ReturnAvailable(QueryStartAvailable, With, Unwind, Return, Limit, Skip, OrderBy):
     """A class decorator declares a Return is available in the current query."""
 
 
-class SetAvailable(QueryStartAvailable, With, Unwind, Return):
+class SetAvailable(QueryStartAvailable, With, Set, Remove, Unwind, Return):
     """A class decorator declares a Set is available in the current query."""
 
 
-class UnwindAvailable(QueryStartAvailable, With, Unwind, Return):
+class SetAfterMergeAvailable(QueryStartAvailable, OnCreate, OnMatch, With, SetAfterMerge, Unwind, Return):
+    """A class decorator declares a SetAfterMerge is available in the current query."""
+
+
+class SkipAvailable(QueryStartAvailable, With, Unwind, Where, CaseWhen, Return, Set, Remove, Limit):
+    """A class decorator declares a Skip is available in the current query."""
+
+
+class UnwindAvailable(QueryStartAvailable, With, Unwind, Return, Create, Remove):
     """A class decorator declares a Unwind is available in the current query."""
 
 
-class WhereAvailable(Return, Delete, With, Where, Set, OperatorStart, QueryStartAvailable):
+class WhereAvailable(Return, Delete, With, Where, Set, Remove, OperatorStart, QueryStartAvailable):
     """A class decorator declares a Where is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, CaseWhen, Return, Limit):
+class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, Remove, CaseWhen, Return, Limit, Skip, OrderBy):
     """A class decorator declares a With is available in the current query."""
 
 
 class YieldAvailable(QueryStartAvailable, Node, With):
     """A class decorator declares a Yield is available in the current query."""
+
+
+class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Unwind, Where, With, Yield):
+    """A class decorator declares anything is available in the current query."""
 
 
 class QueryBuilder(QueryStartAvailable):
