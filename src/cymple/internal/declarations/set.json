@@ -21,6 +21,7 @@
     "QueryStartAvailable", 
     "With", 
     "Set", 
+    "Remove", 
     "Unwind", 
     "Return"
   ] 
