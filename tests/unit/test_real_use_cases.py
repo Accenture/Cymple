@@ -362,19 +362,19 @@ def test_cypher_query_add():
     assert actual_query == expected_query
 
 def test_cypher_set_unescaped_after_merge():
-    service_id = '1'
+    node_id = '1'
 
     expected_query = (
-        f'MERGE (n: {Labels.Application} {{name : "test"}}) '
-        f'ON CREATE SET n.{Properties.has_id} = "{service_id}" '
-        f'ON MATCH SET n.{Properties.has_id} = n.has_id + "1" '
+        f'MERGE (n: Node {{name : "test"}}) '
+        f'ON CREATE SET n.id = "{node_id}" '
+        f'ON MATCH SET n.id = n.id + "1" '
         f'RETURN n')
 
     actual_query = (QueryBuilder()
              .merge()
-             .node(Labels.Application, 'n', {'name': 'test'})
-             .on_create().set({f'n.{Properties.has_id}': service_id})
-             .on_match().set({f'n.{Properties.has_id}': f'n.{Properties.has_id} + "1"'}, escape_values=False)
+             .node('Node', 'n', {'name': 'test'})
+             .on_create().set({f'n.id': node_id})
+             .on_match().set({f'n.id': f'n.id + "1"'}, escape_values=False)
              .return_literal('n')
              .get())
 
