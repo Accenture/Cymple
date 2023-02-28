@@ -43,13 +43,17 @@ class QueryStart(Query):
 class Call(Query):
     """A class for representing a "CALL" clause."""
 
-    def call(self):
-        """Concatenate the "CALL" clause.
+    def call(self, procedure: str):
+        """Concatenate a call statement.
+
+        :param procedure: A string that evaluated to a cypher procedure
+        :type procedure: str
 
         :return: A Query object with a query that contains the new clause.
         :rtype: CallAvailable
         """
-        return CallAvailable(self.query + ' CALL')
+        ret = f" CALL {procedure}"
+        return CallAvailable(self.query + ret)
 
 
 class CaseWhen(Query):
@@ -770,7 +774,7 @@ class QueryStartAvailable(Match, Merge, Call, Create):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
-class CallAvailable(Node, Return, OperatorStart):
+class CallAvailable(Yield, Return, QueryStartAvailable):
     """A class decorator declares a Call is available in the current query."""
 
 
@@ -866,7 +870,7 @@ class WithAvailable(QueryStartAvailable, With, Unwind, Where, Set, Remove, CaseW
     """A class decorator declares a With is available in the current query."""
 
 
-class YieldAvailable(QueryStartAvailable, Node, With):
+class YieldAvailable(QueryStartAvailable, Node, With, Where, Return):
     """A class decorator declares a Yield is available in the current query."""
 
 
