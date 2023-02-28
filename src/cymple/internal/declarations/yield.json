@@ -15,6 +15,8 @@
   "successors": [
     "QueryStartAvailable",
     "Node", 
-    "With"
+    "With",
+    "Where",
+    "Return"
   ] 
 }
