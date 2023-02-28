@@ -1,8 +1,20 @@
 {
   "clause_name": "CALL",
+  "methods": [
+    {
+      "name": "call",
+      "docstring_summary": "Concatenate a call statement",
+      "args": {
+        "procedure": {
+          "type": "str",
+          "description": "A string that evaluated to a cypher procedure"
+        }
+      }
+    }
+  ],
   "successors": [
-    "Node",
-    "Return", 
-    "OperatorStart"
+    "Yield",
+    "Return",
+    "QueryStartAvailable"
   ]
 }
