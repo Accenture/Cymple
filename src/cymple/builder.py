@@ -339,7 +339,7 @@ class Procedure(Query):
     def procedure(self, literal_procedure: str):
         """Concatenate a literal procedure.
 
-        :param literal_procedure: A string that evaluated to a cypher procedure
+        :param literal_procedure: A string that is evaluated to a cypher procedure
         :type literal_procedure: str
 
         :return: A Query object with a query that contains the new clause.
