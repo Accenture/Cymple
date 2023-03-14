@@ -7,7 +7,7 @@
       "args": {
         "literal_procedure": {
           "type": "str",
-          "description": "A string that evaluated to a cypher procedure"
+          "description": "A string that is evaluated to a cypher procedure"
         }
       }
     }
