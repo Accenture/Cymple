@@ -43,17 +43,13 @@ class QueryStart(Query):
 class Call(Query):
     """A class for representing a "CALL" clause."""
 
-    def call(self, procedure: str):
-        """Concatenate a call statement.
-
-        :param procedure: A string that evaluated to a cypher procedure
-        :type procedure: str
+    def call(self):
+        """Concatenate the "CALL" clause.
 
         :return: A Query object with a query that contains the new clause.
         :rtype: CallAvailable
         """
-        ret = f" CALL {procedure}"
-        return CallAvailable(self.query + ret)
+        return CallAvailable(self.query + ' CALL')
 
 
 class CaseWhen(Query):
@@ -335,6 +331,22 @@ class OrderBy(Query):
         ret = f" ORDER BY {', '.join(sorting_properties)}"
         ret += " ASC" if ascending else " DESC"
         return OrderByAvailable(self.query + ret)
+
+
+class Procedure(Query):
+    """A class for representing a "PROCEDURE" clause."""
+
+    def procedure(self, literal_procedure: str):
+        """Concatenate a literal procedure.
+
+        :param literal_procedure: A string that evaluated to a cypher procedure
+        :type literal_procedure: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: ProcedureAvailable
+        """
+        ret = f" {literal_procedure}"
+        return ProcedureAvailable(self.query + ret)
 
 
 class Relation(Query):
@@ -774,7 +786,7 @@ class QueryStartAvailable(Match, Merge, Call, Create):
     """A class decorator declares a QueryStart is available in the current query."""
 
 
-class CallAvailable(Yield, Return, QueryStartAvailable):
+class CallAvailable(Procedure):
     """A class decorator declares a Call is available in the current query."""
 
 
@@ -830,6 +842,10 @@ class OrderByAvailable(Limit, Skip):
     """A class decorator declares a OrderBy is available in the current query."""
 
 
+class ProcedureAvailable(Yield, Return, QueryStartAvailable):
+    """A class decorator declares a Procedure is available in the current query."""
+
+
 class RelationAvailable(Node):
     """A class decorator declares a Relation is available in the current query."""
 
@@ -874,7 +890,7 @@ class YieldAvailable(QueryStartAvailable, Node, With, Where, Return):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Unwind, Where, With, Yield):
+class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 
