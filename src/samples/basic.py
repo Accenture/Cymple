@@ -4,7 +4,7 @@ from cymple.builder import QueryBuilder
 
 
 
-def get_all_nodes_by_label(labels: List[str], node_name: str = 'n'):
+def get_all_nodes_by_label(labels: List[str] | str, node_name: str = 'n'):
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name)
@@ -12,7 +12,7 @@ def get_all_nodes_by_label(labels: List[str], node_name: str = 'n'):
             )
 
 
-def get_all_nodes_by_label_and_properties(labels: List[str], properties: Dict[str, Any], node_name: str = 'n'):
+def get_all_nodes_by_label_and_properties(labels: List[str] | str, properties: Dict[str, Any], node_name: str = 'n'):
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name, properties=properties)
@@ -20,7 +20,7 @@ def get_all_nodes_by_label_and_properties(labels: List[str], properties: Dict[st
             )
 
 
-def get_all_paths(src_node_labels: List[str], dst_node_labels: List[str], relationship_type: str, path_name: str = 'p'):
+def get_all_paths(src_node_labels: List[str] | str, dst_node_labels: List[str] | str, relationship_type: str, path_name: str = 'p'):
     return (QueryBuilder()
             .match()
             .operator_start(operator='', ref_name=path_name)
@@ -32,7 +32,7 @@ def get_all_paths(src_node_labels: List[str], dst_node_labels: List[str], relati
             )
 
 
-def get_all_nodes_related_to_nodes(src_node_labels: List[str], dst_node_labels: List[str], relationship_type: str, dst_node_name: str = 'd'):
+def get_all_nodes_related_to_nodes(src_node_labels: List[str] | str, dst_node_labels: List[str] | str, relationship_type: str, dst_node_name: str = 'd'):
     return (QueryBuilder()
             .match()
             .node(labels=src_node_labels)
@@ -42,7 +42,7 @@ def get_all_nodes_related_to_nodes(src_node_labels: List[str], dst_node_labels: 
             )
 
 
-def get_all_nodes_related_by_fixed_num_of_hops(src_node_labels: List[str], dst_node_labels: List[str], num_hops: int, dst_node_name: str = 'd'):
+def get_all_nodes_related_by_fixed_num_of_hops(src_node_labels: List[str] | str, dst_node_labels: List[str] | str, num_hops: int, dst_node_name: str = 'd'):
     return (QueryBuilder()
             .match()
             .node(labels=src_node_labels)
@@ -52,7 +52,7 @@ def get_all_nodes_related_by_fixed_num_of_hops(src_node_labels: List[str], dst_n
             )
 
 
-def get_all_nodes_related_by_varying_num_of_hops(src_node_labels: List[str], dst_node_labels: List[str], min_hops: int, max_hops: int, dst_node_name: str = 'd'):
+def get_all_nodes_related_by_varying_num_of_hops(src_node_labels: List[str] | str, dst_node_labels: List[str] | str, min_hops: int, max_hops: int, dst_node_name: str = 'd'):
     return (QueryBuilder()
             .match()
             .node(labels=src_node_labels)
@@ -62,15 +62,15 @@ def get_all_nodes_related_by_varying_num_of_hops(src_node_labels: List[str], dst
             )
 
 
-def get_nodes_with_pagination(node_labels: List[str], node_name: str = 'n', offset: int = 0, limit: int = -1):
+def get_nodes_with_pagination(node_labels: List[str] | str, node_name: str = 'n', offset: int = 0, limit: int = -1):
     raise NotImplementedError()
 
 
-def create_node(node_labels: List[str]):
+def create_node(node_labels: List[str] | str):
     raise NotImplementedError()
 
 
-def merge_node(node_labels: List[str], properties: Dict[str, Any] = None):
+def merge_node(node_labels: List[str] | str, properties: Dict[str, Any] = None):
     return (QueryBuilder()
             .merge()
             .node(labels=node_labels, properties=properties)
@@ -81,8 +81,8 @@ def create_relationship(relationship_type: str):
     raise NotImplementedError()
 
 
-def merge_relationship(relationship_type: str, properties: Dict[str, Any] = None, src_node_labels: List[str] = None, 
-                        dst_node_labels: List[str] = None, src_node_properties: Dict[str, Any] = None, dst_node_properties: Dict[str, Any] = None):
+def merge_relationship(relationship_type: str, properties: Dict[str, Any] = None, src_node_labels: List[str] | str = None,
+                        dst_node_labels: List[str] | str = None, src_node_properties: Dict[str, Any] = None, dst_node_properties: Dict[str, Any] = None):
     return (QueryBuilder()
             .match()
             .node(labels=src_node_labels, properties=src_node_properties, ref_name='src')
