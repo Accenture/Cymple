@@ -172,11 +172,11 @@ class Merge(Query):
 class Node(Query):
     """A class for representing a "NODE" clause."""
 
-    def node(self, labels: List[str] | str = None, ref_name: str = None, properties: dict = None):
+    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
-        :type labels: List[str] | str
+        :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
@@ -214,11 +214,11 @@ class Node(Query):
 class NodeAfterMerge(Query):
     """A class for representing a "NODE AFTER MERGE" clause."""
 
-    def node(self, labels: List[str] | str = None, ref_name: str = None, properties: dict = None):
+    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
-        :type labels: List[str] | str
+        :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
