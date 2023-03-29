@@ -6,7 +6,7 @@
       "docstring_summary": "Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.",
       "args": {
         "labels": {
-          "type": "List[str]",
+          "type": "Union[List[str], str]",
           "default": "None",
           "description": "The neo4j label (or list of labels) for that node"
         },
