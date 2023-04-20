@@ -137,6 +137,17 @@ Adding a new Cypher clause to Cymple consists of few simple steps:
 6. If you're satisfied with the new clause, add a unit test in `test_clauses.py` and make sure it generates the expected Cypher string. 
 
 ### Generating Documentation
+
+Make sure you run:
+```
+pip install -r requirements-dev.txt
+```
+or
+```
+pip install sphinx
+```
+to proceed.
+
 To generate a new HTML documentation, run:
 ```
 cd docs
