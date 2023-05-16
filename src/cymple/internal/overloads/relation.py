@@ -1,16 +1,16 @@
 
 
 
-def related(self, label: str, ref_name: str = None, properties: dict = None):
-    return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
+def related(self, label: str, ref_name: str = None, properties: dict = None, **kwargs):
+    return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, **kwargs))
 
 
-def related_to(self, label: str, ref_name: str = None, properties: str = {}):
-    return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties))
+def related_to(self, label: str, ref_name: str = None, properties: str = {}, **kwargs):
+    return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, **kwargs))
 
 
-def related_from(self, label: str, ref_name: str = None, properties: str = {}):
-    return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
+def related_from(self, label: str, ref_name: str = None, properties: str = {}, **kwargs):
+    return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
 
 
 def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
@@ -27,10 +27,10 @@ def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
     return RelationAvailable(self.query + f'-{realtion_str}-')
 
 
-def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: str = {}):
+def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: str = {}, **kwargs):
     relation_type = '' if label is None else f': {label}'
     relation_ref_name = '' if ref_name is None else f'{ref_name}'
-    relation_properties = f' {{{str(Properties(properties))}}}' if properties else ''
+    relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
 
     if relation_ref_name or relation_type:
         realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'

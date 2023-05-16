@@ -19,6 +19,9 @@
           "type": "dict",
           "default": "None",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -40,6 +43,9 @@
           "type": "dict",
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -61,6 +67,9 @@
           "type": "dict",
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -101,6 +110,9 @@
           "type": "dict",
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     }
