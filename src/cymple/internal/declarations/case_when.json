@@ -30,6 +30,9 @@
           "type": "str",
           "default": "\"AND\"",
           "description": "The boolean operator to apply between predicates"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     }

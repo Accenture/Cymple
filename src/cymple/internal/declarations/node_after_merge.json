@@ -19,6 +19,9 @@
           "type": "dict",
           "default": "None",
           "description": "A dict representing the set of properties by which the nodes are filtered"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     }

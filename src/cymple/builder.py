@@ -55,7 +55,7 @@ class Call(Query):
 class CaseWhen(Query):
     """A class for representing a "CASE WHEN" clause."""
 
-    def case_when(self, filters: dict, on_true: str, on_false: str, ref_name: str, comparison_operator: str = "=", boolean_operator: str = "AND"):
+    def case_when(self, filters: dict, on_true: str, on_false: str, ref_name: str, comparison_operator: str = "=", boolean_operator: str = "AND", **kwargs):
         """Concatenate a CASE WHEN clause to the query, created from a list of given property filters.
 
         :param filters: A dict representing the set of properties to be filtered
@@ -71,11 +71,13 @@ class CaseWhen(Query):
         :type comparison_operator: str
         :param boolean_operator: The boolean operator to apply between predicates, defaults to "AND"
         :type boolean_operator: str
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: CaseWhenAvailable
         """
-        filt = ' CASE WHEN ' + Properties(filters).to_str(comparison_operator, boolean_operator)
+        filt = ' CASE WHEN ' + Properties(filters).to_str(comparison_operator, boolean_operator, **kwargs)
         filt += f' THEN {on_true} ELSE {on_false} END as {ref_name}'
         return CaseWhenAvailable(self.query + filt)
 
@@ -172,7 +174,7 @@ class Merge(Query):
 class Node(Query):
     """A class for representing a "NODE" clause."""
 
-    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None):
+    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
@@ -181,6 +183,8 @@ class Node(Query):
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: NodeAvailable
@@ -195,7 +199,7 @@ class Node(Query):
         if not properties:
             property_string = ''
         else:
-            property_string = f' {{{str(Properties(properties))}}}'
+            property_string = f' {{{Properties(properties).to_str(**kwargs)}}}'
 
         ref_name = ref_name or ''
 
@@ -214,7 +218,7 @@ class Node(Query):
 class NodeAfterMerge(Query):
     """A class for representing a "NODE AFTER MERGE" clause."""
 
-    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None):
+    def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
         :param labels: The neo4j label (or list of labels) for that node, defaults to None
@@ -223,6 +227,8 @@ class NodeAfterMerge(Query):
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the nodes are filtered, defaults to None
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: NodeAfterMergeAvailable
@@ -237,7 +243,7 @@ class NodeAfterMerge(Query):
         if not properties:
             property_string = ''
         else:
-            property_string = f' {{{str(Properties(properties))}}}'
+            property_string = f' {{{Properties(properties).to_str(**kwargs)}}}'
 
         ref_name = ref_name or ''
 
@@ -352,7 +358,7 @@ class Procedure(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None):
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -362,13 +368,15 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             None
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}):
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -378,13 +386,15 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}):
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -394,11 +404,13 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
 
     def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
         """Concatenate a uni-directional graph Relationship, with a variable path length.
@@ -424,7 +436,7 @@ class Relation(Query):
 
         return RelationAvailable(self.query + f'-{realtion_str}-')
 
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}):
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
@@ -436,13 +448,15 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
         relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
-        relation_properties = f' {{{str(Properties(properties))}}}' if properties else ''
+        relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
 
         if relation_ref_name or relation_type:
             realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'
@@ -460,7 +474,7 @@ class Relation(Query):
 class RelationAfterMerge(Query):
     """A class for representing a "RELATION AFTER MERGE" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None):
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -470,13 +484,15 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             None
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}):
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -486,13 +502,15 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}):
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -502,11 +520,13 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
 
     def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
         """Concatenate a uni-directional graph Relationship, with a variable path length.
@@ -532,7 +552,7 @@ class RelationAfterMerge(Query):
 
         return RelationAvailable(self.query + f'-{realtion_str}-')
 
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}):
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
@@ -544,13 +564,15 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
         relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
-        relation_properties = f' {{{str(Properties(properties))}}}' if properties else ''
+        relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
 
         if relation_ref_name or relation_type:
             realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'
@@ -699,7 +721,7 @@ class Unwind(Query):
 class Where(Query):
     """A class for representing a "WHERE" clause."""
 
-    def where(self, name: str, comparison_operator: str, value: str):
+    def where(self, name: str, comparison_operator: str, value: str, **kwargs):
         """Concatenate a WHERE clause to the query, created as {name} {comparison_operator} {value}. E.g. x = 'abc'.
 
         :param name: The name of the object which is to be used in the comparison
@@ -709,13 +731,15 @@ class Where(Query):
         :type comparison_operator: str
         :param value: The value which is compared against
         :type value: str
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: WhereAvailable
         """
-        return self.where_multiple({name: value}, comparison_operator)
+        return self.where_multiple({name: value}, comparison_operator, **kwargs)
 
-    def where_multiple(self, filters: dict, comparison_operator: str = "=", boolean_operator: str = ' AND '):
+    def where_multiple(self, filters: dict, comparison_operator: str = "=", boolean_operator: str = ' AND ', **kwargs):
         """Concatenate a WHERE clause to the query, created from a list of given property filters.
 
         :param filters: A dict representing the set of properties to be filtered
@@ -725,18 +749,22 @@ class Where(Query):
         :type comparison_operator: str
         :param boolean_operator: The boolean operator to apply between predicates, defaults to ' AND '
         :type boolean_operator: str
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: WhereAvailable
         """
-        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator)
+        filt = ' WHERE ' + Properties(filters).to_str(comparison_operator, boolean_operator, **kwargs)
         return WhereAvailable(self.query + filt)
 
-    def where_literal(self, statement: str):
+    def where_literal(self, statement: str, **kwargs):
         """Concatenate a literal WHERE clause to the query.
 
         :param statement: A literal string of the required filter
         :type statement: str
+        :param **kwargs: kwargs
+        :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: WhereAvailable

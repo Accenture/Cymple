@@ -1,7 +1,7 @@
 
 
 
-def node(self, labels=None, ref_name: str = None, properties: dict = None):
+def node(self, labels=None, ref_name: str = None, properties: dict = None, **kwargs):
     if not labels:
         labels_string = ''
     elif isinstance(labels, str):
@@ -12,7 +12,7 @@ def node(self, labels=None, ref_name: str = None, properties: dict = None):
     if not properties:
         property_string = ''
     else:
-        property_string = f' {{{str(Properties(properties))}}}'
+        property_string = f' {{{Properties(properties).to_str(**kwargs)}}}'
 
     ref_name = ref_name or ''
 

@@ -16,6 +16,9 @@
         "value": {
           "type": "str",
           "description": "The value which is compared against"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -36,6 +39,9 @@
           "type": "str",
           "default": "' AND '",
           "description": "The boolean operator to apply between predicates"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -46,6 +52,9 @@
         "statement": {
           "type": "str",
           "description": "A literal string of the required filter"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     }
