@@ -39,7 +39,6 @@
   ],
   "successors": [
     "QueryStartAvailable", 
-    "With", 
     "Unwind", 
     "Where", 
     "CaseWhen", 

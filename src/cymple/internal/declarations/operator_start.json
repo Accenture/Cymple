@@ -24,8 +24,7 @@
   ],
   "successors": [
     "QueryStartAvailable",
-    "Node", 
-    "With", 
+    "Node",  
     "OperatorEnd"
   ] 
 }
