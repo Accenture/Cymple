@@ -21,7 +21,6 @@
     "QueryStartAvailable", 
     "OnCreate",
     "OnMatch",
-    "With", 
     "SetAfterMerge", 
     "Unwind", 
     "Return"

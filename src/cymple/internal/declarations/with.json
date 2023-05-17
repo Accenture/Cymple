@@ -14,7 +14,6 @@
   ],
   "successors": [
     "QueryStartAvailable", 
-    "With", 
     "Unwind", 
     "Where", 
     "Set",
