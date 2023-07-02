@@ -412,9 +412,13 @@ class Relation(Query):
         """
         return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
 
-    def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
+    def related_variable_len(self, label: str = None, ref_name: str = None, min_hops: int = -1, max_hops: int = -1):
         """Concatenate a uni-directional graph Relationship, with a variable path length.
 
+        :param label: The relationship label (type) in the DB, defaults to None
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
         :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1
@@ -426,11 +430,14 @@ class Relation(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
 
+        relation_type = '' if label is None else f': {label}'
+        relation_ref_name = '' if ref_name is None else f'{ref_name}'
+
         relation_length = '*' if min_hops == -1 and max_hops == - \
             1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
 
         if relation_length:
-            realtion_str = f'[{relation_length}]'
+            realtion_str = f'[{relation_ref_name}{relation_type}{relation_length}]'
         else:
             realtion_str = ''
 
@@ -542,11 +549,14 @@ class RelationAfterMerge(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
 
+        relation_type = '' if label is None else f': {label}'
+        relation_ref_name = '' if ref_name is None else f'{ref_name}'
+
         relation_length = '*' if min_hops == -1 and max_hops == - \
             1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
 
         if relation_length:
-            realtion_str = f'[{relation_length}]'
+            realtion_str = f'[{relation_ref_name}{relation_type}{relation_length}]'
         else:
             realtion_str = ''
 
