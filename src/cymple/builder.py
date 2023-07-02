@@ -535,9 +535,13 @@ class RelationAfterMerge(Query):
         """
         return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
 
-    def related_variable_len(self, min_hops: int = -1, max_hops: int = -1):
+    def related_variable_len(self, label: str = None, ref_name: str = None, min_hops: int = -1, max_hops: int = -1):
         """Concatenate a uni-directional graph Relationship, with a variable path length.
 
+        :param label: The relationship label (type) in the DB, defaults to None
+        :type label: str
+        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
+        :type ref_name: str
         :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1

@@ -77,6 +77,16 @@
       "name": "related_variable_len",
       "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable path length.",
       "args": {
+        "label": {
+          "type": "str",
+          "default": "None",
+          "description": "The relationship label (type) in the DB"
+        },
+        "ref_name": {
+          "type": "str",
+          "default": "None",
+          "description": "A reference name to be used later in the rest of the query"
+        },
         "min_hops": {
           "type": "int",
           "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
