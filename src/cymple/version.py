@@ -1,3 +1,3 @@
 """Version information for Cymple"""
 
-__version__: str = "0.8.2"
+__version__: str = "0.9.0"
