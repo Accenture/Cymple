@@ -61,13 +61,13 @@ Two queries can be combined to a create a new one.
 ```python
 qb = QueryBuilder()
 query1 = qb.match().node(labels='Person', ref_name='p').with_('p')
-query2 = qb.match().node(labels='Person', ref_name='q').related_to('friend_of').node('p')
+query2 = qb.match().node(labels='Person', ref_name='q').related_to('friend_of').node(ref_name='p')
 query = query1 + query2
 print(query)
 ```
 This snippet will output the following Cypher query:
 ```cypher
-MATCH (p: Person) WITH p MATCH (q: Person)-[: friend_of]->(: p)
+MATCH (p: Person) WITH p MATCH (q: Person)-[: friend_of]->(p)
 ```
 
 ### Prerequisites
