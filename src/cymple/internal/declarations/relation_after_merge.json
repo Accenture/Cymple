@@ -20,6 +20,16 @@
           "default": "None",
           "description": "A dict representing the set of properties by which the relationship is filtered"
         },
+        "min_hops": {
+          "type": "int",
+          "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
+          "default": "1"
+        },
+        "max_hops": {
+          "type": "int",
+          "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
+          "default": "1"
+        },
         "**kwargs": {
           "description": "kwargs"
         }
@@ -43,6 +53,16 @@
           "type": "dict",
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "min_hops": {
+          "type": "int",
+          "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
+          "default": "1"
+        },
+        "max_hops": {
+          "type": "int",
+          "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
+          "default": "1"
         },
         "**kwargs": {
           "description": "kwargs"
@@ -68,34 +88,18 @@
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
         },
-        "**kwargs": {
-          "description": "kwargs"
-        }
-      }
-    },
-    {
-      "name": "related_variable_len",
-      "docstring_summary": "Concatenate a uni-directional graph Relationship, with a variable path length.",
-      "args": {
-        "label": {
-          "type": "str",
-          "default": "None",
-          "description": "The relationship label (type) in the DB"
-        },
-        "ref_name": {
-          "type": "str",
-          "default": "None",
-          "description": "A reference name to be used later in the rest of the query"
-        },
         "min_hops": {
           "type": "int",
           "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
-          "default": "-1"
+          "default": "1"
         },
         "max_hops": {
           "type": "int",
           "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
-          "default": "-1"
+          "default": "1"
+        },
+        "**kwargs": {
+          "description": "kwargs"
         }
       }
     },
@@ -120,6 +124,16 @@
           "type": "dict",
           "default": "{}",
           "description": "A dict representing the set of properties by which the relationship is filtered"
+        },
+        "min_hops": {
+          "type": "int",
+          "description": "The minimal desired number of hops (set -1 for maximum boundary only)",
+          "default": "1"
+        },
+        "max_hops": {
+          "type": "int",
+          "description": "The maximal desired number of hops (set -1 for minimal boundary only)",
+          "default": "1"
         },
         "**kwargs": {
           "description": "kwargs"
