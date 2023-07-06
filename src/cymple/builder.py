@@ -358,7 +358,7 @@ class Procedure(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None, **kwargs):
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -368,15 +368,19 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             None
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -386,15 +390,19 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -404,46 +412,19 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_variable_len(self, label: str = None, ref_name: str = None, min_hops: int = -1, max_hops: int = -1):
-        """Concatenate a uni-directional graph Relationship, with a variable path length.
-
-        :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
-        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
-        :type ref_name: str
-        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
-        :type min_hops: int
-        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1
-        :type max_hops: int
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: RelationAvailable
-        """
-        min_hops_str = '' if min_hops == -1 else str(min_hops)
-        max_hops_str = '' if max_hops == -1 else str(max_hops)
-
-        relation_type = '' if label is None else f': {label}'
-        relation_ref_name = '' if ref_name is None else f'{ref_name}'
-
-        relation_length = '*' if min_hops == -1 and max_hops == - \
-            1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
-
-        if relation_length:
-            realtion_str = f'[{relation_ref_name}{relation_type}{relation_length}]'
-        else:
-            realtion_str = ''
-
-        return RelationAvailable(self.query + f'-{realtion_str}-')
-
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, **kwargs):
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
@@ -455,33 +436,48 @@ class Relation(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
+        min_hops_str = '' if min_hops == -1 else str(min_hops)
+        max_hops_str = '' if max_hops == -1 else str(max_hops)
+
         relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
-
-        if relation_ref_name or relation_type:
-            realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'
+        if min_hops == 1 and max_hops == 1:
+            relation_length = ''
+        elif min_hops == -1 and max_hops == -1:
+            relation_length = '*'
+        elif min_hops == max_hops:
+            relation_length = f'*{min_hops_str}'
         else:
-            realtion_str = ''
+            relation_length = f'*{min_hops_str}..{max_hops_str}'
+
+        if relation_ref_name or relation_type or relation_length or relation_properties:
+            relation_str = f'[{relation_ref_name}{relation_type}{relation_length}{relation_properties}]'
+        else:
+            relation_str = ''
 
         if direction == 'forward':
-            return f'-{realtion_str}->'
+            return f'-{relation_str}->'
         if direction == 'backward':
-            return f'<-{realtion_str}-'
+            return f'<-{relation_str}-'
 
-        return f'-{realtion_str}-'
+        return f'-{relation_str}-'
 
 
 class RelationAfterMerge(Query):
     """A class for representing a "RELATION AFTER MERGE" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None, **kwargs):
+    def related(self, label: str = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -491,15 +487,19 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             None
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
+    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -509,15 +509,19 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, **kwargs):
+    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
@@ -527,46 +531,19 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_variable_len(self, label: str = None, ref_name: str = None, min_hops: int = -1, max_hops: int = -1):
-        """Concatenate a uni-directional graph Relationship, with a variable path length.
-
-        :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
-        :param ref_name: A reference name to be used later in the rest of the query, defaults to None
-        :type ref_name: str
-        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to -1
-        :type min_hops: int
-        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to -1
-        :type max_hops: int
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: RelationAfterMergeAvailable
-        """
-        min_hops_str = '' if min_hops == -1 else str(min_hops)
-        max_hops_str = '' if max_hops == -1 else str(max_hops)
-
-        relation_type = '' if label is None else f': {label}'
-        relation_ref_name = '' if ref_name is None else f'{ref_name}'
-
-        relation_length = '*' if min_hops == -1 and max_hops == - \
-            1 else (f'*{min_hops_str}'if min_hops == max_hops else f'*{min_hops_str}..{max_hops_str}')
-
-        if relation_length:
-            realtion_str = f'[{relation_ref_name}{relation_type}{relation_length}]'
-        else:
-            realtion_str = ''
-
-        return RelationAvailable(self.query + f'-{realtion_str}-')
-
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, **kwargs):
+    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
@@ -578,27 +555,42 @@ class RelationAfterMerge(Query):
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
             {}
         :type properties: dict
+        :param min_hops: The minimal desired number of hops (set -1 for maximum boundary only), defaults to 1
+        :type min_hops: int
+        :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
+        :type max_hops: int
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
+        min_hops_str = '' if min_hops == -1 else str(min_hops)
+        max_hops_str = '' if max_hops == -1 else str(max_hops)
+
         relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
-
-        if relation_ref_name or relation_type:
-            realtion_str = f'[{relation_ref_name}{relation_type}{relation_properties}]'
+        if min_hops == 1 and max_hops == 1:
+            relation_length = ''
+        elif min_hops == -1 and max_hops == -1:
+            relation_length = '*'
+        elif min_hops == max_hops:
+            relation_length = f'*{min_hops_str}'
         else:
-            realtion_str = ''
+            relation_length = f'*{min_hops_str}..{max_hops_str}'
+
+        if relation_ref_name or relation_type or relation_length or relation_properties:
+            relation_str = f'[{relation_ref_name}{relation_type}{relation_length}{relation_properties}]'
+        else:
+            relation_str = ''
 
         if direction == 'forward':
-            return f'-{realtion_str}->'
+            return f'-{relation_str}->'
         if direction == 'backward':
-            return f'<-{realtion_str}-'
+            return f'<-{relation_str}-'
 
-        return f'-{realtion_str}-'
+        return f'-{relation_str}-'
 
 
 class Remove(Query):
