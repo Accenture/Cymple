@@ -55,8 +55,11 @@ rendered = {
     'ORDER BY (Desc)': qb.match().node(ref_name='n').return_literal('n.name, n.age').order_by("n.name", False),
     'CREATE': qb.reset().create().node(ref_name='n').return_literal('n'),
     'REMOVE': qb.reset().match().node(ref_name='n').remove('n.name').return_literal('n.age, n.name'),
-    'REMOVE (list)': qb.reset().match().node(ref_name='n').remove(['n.age', 'n.name']).return_literal('n.age, n.name')
-
+    'REMOVE (list)': qb.reset().match().node(ref_name='n').remove(['n.age', 'n.name']).return_literal('n.age, n.name'),
+    'UNION': qb.match().node(ref_name='n', labels="Actor").return_mapping([('n.name', 'name')]).union().match().node(
+        ref_name='n', labels="Movie").return_mapping([('n.title', 'name')]),
+    'UNION (all)': qb.match().node(ref_name='n', labels="Actor").return_mapping(
+        [('n.name', 'name')]).union_all().match().node(ref_name='n', labels="Movie").return_mapping([('n.title', 'name')])
 }
 
 expected = {
@@ -110,7 +113,9 @@ expected = {
     'ORDER BY (Desc)': 'MATCH (n) RETURN n.name, n.age ORDER BY n.name DESC',
     'CREATE': 'CREATE (n) RETURN n',
     'REMOVE': 'MATCH (n) REMOVE n.name RETURN n.age, n.name',
-    'REMOVE (list)': 'MATCH (n) REMOVE n.age, n.name RETURN n.age, n.name'
+    'REMOVE (list)': 'MATCH (n) REMOVE n.age, n.name RETURN n.age, n.name',
+    'UNION': 'MATCH (n: Actor) RETURN n.name as name UNION MATCH (n: Movie) RETURN n.title as name',
+    'UNION (all)': 'MATCH (n: Actor) RETURN n.name as name UNION ALL MATCH (n: Movie) RETURN n.title as name',
 }
 
 

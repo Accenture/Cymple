@@ -13,7 +13,7 @@
       },
       {
         "name": "return_mapping",
-        "docstring_summary": "Concatenate a RETURN statement for mutiple objects.",
+        "docstring_summary": "Concatenate a RETURN statement for multiple objects.",
         "args": {
           "mappings": {
             "type": "List[Mapping]",
@@ -28,6 +28,7 @@
       "Return",
       "Limit",
       "Skip",
-      "OrderBy"
+      "OrderBy",
+      "Union"
     ] 
   }
