@@ -1,0 +1,25 @@
+{
+    "clause_name": "UNION",
+    "methods": [
+      {
+        "name": "union",
+        "docstring_summary": "Combines the results of two or more queries. Duplicates are removed."
+      },
+      {
+        "name": "union_all",
+        "docstring_summary": "Combines the results of two or more queries including duplicates."
+      }
+    ],
+    "successors": [
+      "Call",
+      "Create",
+      "Delete",
+      "Match",
+      "Merge",
+      "Remove",
+      "Return",
+      "Set",
+      "Unwind",
+      "With"
+    ]
+}

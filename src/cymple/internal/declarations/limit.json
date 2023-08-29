@@ -19,6 +19,7 @@
     "CaseWhen",
     "Return",
     "Set",
-    "Skip"
+    "Skip",
+    "Union"
   ]
 }

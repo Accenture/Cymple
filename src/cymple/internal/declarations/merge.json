@@ -3,6 +3,7 @@
   "successors": [
     "NodeAfterMerge",
     "Return", 
-    "OperatorStart"
+    "OperatorStart",
+    "Union"
   ]
 }

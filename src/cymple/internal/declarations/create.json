@@ -1,6 +1,7 @@
 {
   "clause_name": "CREATE",
   "successors": [
-    "Node"
+    "Node",
+    "Union"
   ]
 }
