@@ -379,3 +379,18 @@ def test_cypher_set_unescaped_after_merge():
              .get())
 
     assert actual_query == expected_query
+
+def test_multiple_where_1():
+    expected_query = 'MATCH (p) WHERE p.lock IS NULL OR p.value IS NULL'
+    actual_query = str(QueryBuilder().match().node(ref_name='p').where_multiple({'p.lock': 'NULL', 'p.value': 'NULL'}, 'IS', ' OR ', escape=False))
+    assert actual_query == expected_query
+
+def test_multiple_where_2():
+    expected_query = 'MATCH (n: Person) WHERE n.age=32 AND NOT n:Teacher'
+    actual_query = str(QueryBuilder().match().node('Person', ref_name='n').where_literal('n.age=32 AND NOT n:Teacher'))
+    assert actual_query == expected_query
+
+def test_with_list():
+    expected_query = 'MATCH (n) WITH n as n_test WITH [n_test] as n_list RETURN n_list as n_test'
+    actual_query = str(QueryBuilder().match().node(ref_name='n').with_('n as n_test').with_('[n_test] as n_list').return_mapping(('n_list', 'n_test')))
+    assert actual_query == expected_query
