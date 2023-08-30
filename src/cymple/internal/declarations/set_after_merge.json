@@ -23,6 +23,7 @@
     "OnMatch",
     "SetAfterMerge", 
     "Unwind", 
-    "Return"
+    "Return",
+    "Union"
   ] 
 }

@@ -20,6 +20,7 @@
     "Return",
     "Set",
     "Remove",
-    "Limit"
+    "Limit",
+    "Union"
   ]
 }

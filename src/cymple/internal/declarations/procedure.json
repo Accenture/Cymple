@@ -15,6 +15,7 @@
   "successors": [
     "Yield",
     "Return",
-    "QueryStartAvailable"
+    "QueryStartAvailable",
+    "Union"
   ]
 }

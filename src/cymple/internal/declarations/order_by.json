@@ -19,6 +19,7 @@
   ],
   "successors": [
     "Limit",
-    "Skip"
+    "Skip",
+    "Union"
   ]
 }
