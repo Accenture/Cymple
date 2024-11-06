@@ -138,7 +138,7 @@ def render_builder_code():
     clauses_output += '# pylint: disable=R0901\n'
     clauses_output += '# pylint: disable=R0903\n'
     clauses_output += '# pylint: disable=W0102\n'
-    clauses_output += 'from typing import List, Union\n'
+    clauses_output += 'from typing import List, Union, Dict, Any\n'
     clauses_output += 'from .typedefs import Mapping, Properties\n\n'
     clauses_output += inspect.getsource(query_class) + '\n\n'
 
