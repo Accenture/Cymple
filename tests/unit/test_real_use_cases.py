@@ -215,7 +215,7 @@ def cypher_relationship_properties(service_id):
 
 
 def test_cypher_get_all_findings():
-    expected_query = f'MATCH (n: {Labels.Finding}) RETURN n as n'
+    expected_query = f'MATCH (n: {Labels.Finding}) RETURN n AS n'
     actual_query = cypher_get_all_findings()
     assert actual_query == expected_query
 
@@ -224,22 +224,22 @@ def test_cypher_get_findings():
     expected_query = (
         f'MATCH (f: {Labels.Finding})-[: {Relations.has_finding_type}]->'
         f'(t: {Labels.FindingType})-[: {Relations.has_cve}]->(ct: {Labels.CVEType}) '
-        f'RETURN f.{Properties.has_id} as id, t.{Properties.has_probability} as probability, '
-        f't.{Properties.has_severity} as severity, ct.{Properties.has_id} as cve')
+        f'RETURN f.{Properties.has_id} AS id, t.{Properties.has_probability} AS probability, '
+        f't.{Properties.has_severity} AS severity, ct.{Properties.has_id} AS cve')
     actual_query = cypher_get_findings()
     assert actual_query == expected_query
 
 
 def test_cypher_get_services():
     expected_query = (f'MATCH (s: {Labels.ServiceType}) '
-                      f'RETURN s.{Properties.has_id} as id, s.{Properties.has_name} as name')
+                      f'RETURN s.{Properties.has_id} AS id, s.{Properties.has_name} AS name')
     actual_query = cypher_get_services()
     assert actual_query == expected_query
 
 
 def test_cypher_get_business_applications():
     expected_query = (f'MATCH (a: {Labels.Application}) '
-                      f'RETURN a.{Properties.has_id} as id, a.{Properties.has_name} as name')
+                      f'RETURN a.{Properties.has_id} AS id, a.{Properties.has_name} AS name')
     actual_query = cypher_get_business_applications()
     assert actual_query == expected_query
 
@@ -251,11 +251,11 @@ def test_cypher_get_finding_detailed():
         f'MATCH (f: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})-'
         f'[: {Relations.has_finding_type}]->(t: {Labels.FindingType})'
         f'-[: {Relations.has_cve}]->(ct: {Labels.CVEType}) '
-        f'RETURN f.{Properties.has_id} as id, '
-        f't.{Properties.has_probability} as probability, '
-        f't.{Properties.has_severity} as severity, ct.{Properties.has_id} as cve, '
-        f't.{Properties.has_description} as description, '
-        f't.{Properties.has_attack_scenario} as attack_scenario, t.recommendation as recommendations')
+        f'RETURN f.{Properties.has_id} AS id, '
+        f't.{Properties.has_probability} AS probability, '
+        f't.{Properties.has_severity} AS severity, ct.{Properties.has_id} AS cve, '
+        f't.{Properties.has_description} AS description, '
+        f't.{Properties.has_attack_scenario} AS attack_scenario, t.recommendation AS recommendations')
 
     actual_query = cypher_get_finding_detailed(finding_id)
     assert actual_query == expected_query
@@ -264,7 +264,7 @@ def test_cypher_get_finding_detailed():
 def test_cypher_get_business_application():
     application_id = 'THAT_is_MOCK_id'
     expected_query = (f'MATCH (a: {Labels.Application} {{{Properties.has_id} : "{application_id}"}}) '
-                      f'RETURN a.{Properties.has_id} as id, a.{Properties.has_name} as name')
+                      f'RETURN a.{Properties.has_id} AS id, a.{Properties.has_name} AS name')
     actual_query = cypher_get_business_application(application_id)
     assert actual_query == expected_query
 
@@ -274,7 +274,7 @@ def test_cypher_get_references_for_finding():
 
     expected_query = (f'MATCH (: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
                       f'-[: {Relations.has_reference}]->(r: {Labels.ReferenceType}) '
-                      f'RETURN r.{Properties.has_description} as reference')
+                      f'RETURN r.{Properties.has_description} AS reference')
 
     actual_query = cypher_get_references_for_finding(finding_id)
     assert actual_query == expected_query
@@ -286,7 +286,7 @@ def test_cypher_get_applications_for_finding():
     expected_query = (
         f'MATCH (: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
         f'-[: {Relations.has_cloud_object}]->(a: {Labels.Application}) '
-        f'RETURN a.{Properties.has_name} as name')
+        f'RETURN a.{Properties.has_name} AS name')
 
     actual_query = cypher_get_applications_for_finding(finding_id)
     assert actual_query == expected_query
@@ -299,8 +299,8 @@ def test_cypher_get_finding_type_details_for_service():
         f'MATCH (t: {Labels.FindingType})<-[: {Relations.has_finding_type}]-'
         f'(: {Labels.Finding})-[: {Relations.has_cloud_object}]->'
         f'(: {Labels.CloudObject})-[: {Relations.has_service}]->( {{{Properties.has_id} : "{service_id}"}}) '
-        f'RETURN collect(t.{Properties.has_severity}) as severities, '
-        f'collect(t.{Properties.has_probability}) as probabilities')
+        f'RETURN collect(t.{Properties.has_severity}) AS severities, '
+        f'collect(t.{Properties.has_probability}) AS probabilities')
 
     actual_query = cypher_get_finding_type_details_per_id(service_id)
     assert actual_query == expected_query
@@ -391,6 +391,6 @@ def test_multiple_where_2():
     assert actual_query == expected_query
 
 def test_with_list():
-    expected_query = 'MATCH (n) WITH n as n_test WITH [n_test] as n_list RETURN n_list as n_test'
-    actual_query = str(QueryBuilder().match().node(ref_name='n').with_('n as n_test').with_('[n_test] as n_list').return_mapping(('n_list', 'n_test')))
+    expected_query = 'MATCH (n) WITH n AS n_test WITH [n_test] AS n_list RETURN n_list AS n_test'
+    actual_query = str(QueryBuilder().match().node(ref_name='n').with_('n AS n_test').with_('[n_test] AS n_list').return_mapping(('n_list', 'n_test')))
     assert actual_query == expected_query

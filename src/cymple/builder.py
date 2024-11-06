@@ -113,7 +113,7 @@ class CaseWhen(Query):
         :rtype: CaseWhenAvailable
         """
         filt = ' CASE WHEN ' + Properties(filters).to_str(comparison_operator, boolean_operator, **kwargs)
-        filt += f' THEN {on_true} ELSE {on_false} END as {ref_name}'
+        filt += f' THEN {on_true} ELSE {on_false} END AS {ref_name}'
         return CaseWhenAvailable(self.query + filt)
 
 
@@ -679,7 +679,7 @@ class Return(Query):
 
         ret = ' RETURN ' + \
             ', '.join(
-                f'{mapping[0]} as {mapping[1]}' if mapping[1] else mapping[0].replace(".", "_")
+                f'{mapping[0]} AS {mapping[1]}' if mapping[1] else mapping[0].replace(".", "_")
                 for mapping in mappings)
 
         return ReturnAvailable(self.query + ret)
@@ -877,7 +877,7 @@ class Yield(Query):
             mappings = [mappings]
 
         query = ' YIELD ' + \
-            ', '.join(f'{mapping[0]} as '
+            ', '.join(f'{mapping[0]} AS '
                       f'{mapping[1] if mapping[1] else mapping[0].replace(".", "_")}'
                       for mapping in mappings)
         return YieldAvailable(self.query + query)
