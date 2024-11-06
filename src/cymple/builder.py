@@ -3,7 +3,7 @@
 # pylint: disable=R0901
 # pylint: disable=R0903
 # pylint: disable=W0102
-from typing import List, Union
+from typing import List, Union, Dict, Any
 from .typedefs import Mapping, Properties
 
 
@@ -50,6 +50,41 @@ class Call(Query):
         :rtype: CallAvailable
         """
         return CallAvailable(self.query + ' CALL')
+
+
+class Case(Query):
+    """A class for representing a "CASE" clause."""
+
+    def case(self, when_then_mapping: Dict[str, Union[List[str], str]], default_result: str, results_ref: str = None, test_expression: str = None):
+        """Concatenate a CASE clause to the query, to compare a single expression against multiple values or to express multiple conditional statements.
+
+        :param when_then_mapping: A dictionary such that a value represents a literal expression (or a list of
+            expressions) whose result will be compared to test_expression if given, else is evaluated to a BOOLEAN, and it's key represents the literal expression returned as output if the value matches test_expression if giver, or if the expression evaluates to TRUE.
+        :type when_then_mapping: Dict[str, Union[List[str], str]]
+        :param default_result: The expression to return if no value matches the test expression if given, or if all
+            expressions evaluated as FALSE.
+        :type default_result: str
+        :param results_ref: The reference name of the resulted returned values, plus any other desired reference names
+            to return., defaults to None
+        :type results_ref: str
+        :param test_expression: An expression to test the cases against. For example, 'n.name'. Optional., defaults to
+            None
+        :type test_expression: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: CaseAvailable
+        """
+        ret = " CASE"
+        if test_expression is not None:
+            ret += f" {test_expression}"
+        for then, when in when_then_mapping.items():
+            if type(when) is not list:
+                when = [when]
+            ret += f" WHEN {', '.join(when)} THEN {then}"
+        ret += f" ELSE {default_result} END"
+        if results_ref is not None:
+            ret += f" AS {results_ref}"
+        return CaseAvailable(self.query + ret)
 
 
 class CaseWhen(Query):
@@ -614,17 +649,19 @@ class Remove(Query):
 class Return(Query):
     """A class for representing a "RETURN" clause."""
 
-    def return_literal(self, literal: str):
+    def return_literal(self, literal: str = None):
         """Concatenate a literal RETURN statement.
 
         :param literal: A Cypher string describing the objects to be returned, referencing name/names which were
-            defined earlier in the query
+            defined earlier in the query, defaults to None
         :type literal: str
 
         :return: A Query object with a query that contains the new clause.
         :rtype: ReturnAvailable
         """
-        ret = f' RETURN {literal}'
+        ret = f' RETURN'
+        if literal is not None:
+            ret += f' {literal}'
 
         return ReturnAvailable(self.query + ret)
 
@@ -854,6 +891,10 @@ class CallAvailable(Procedure):
     """A class decorator declares a Call is available in the current query."""
 
 
+class CaseAvailable(QueryStartAvailable, Unwind, Where, Set, Remove, CaseWhen, Return, Limit, Skip, OrderBy, Union):
+    """A class decorator declares a Case is available in the current query."""
+
+
 class CaseWhenAvailable(QueryStartAvailable, Unwind, Where, CaseWhen, Return, Set):
     """A class decorator declares a CaseWhen is available in the current query."""
 
@@ -922,7 +963,7 @@ class RemoveAvailable(Set, Return, Union):
     """A class decorator declares a Remove is available in the current query."""
 
 
-class ReturnAvailable(QueryStartAvailable, Unwind, Return, Limit, Skip, OrderBy, Union):
+class ReturnAvailable(QueryStartAvailable, Unwind, Return, Limit, Skip, OrderBy, Union, CaseWhen, Case):
     """A class decorator declares a Return is available in the current query."""
 
 
@@ -950,7 +991,7 @@ class WhereAvailable(Return, Delete, Where, Set, Remove, OperatorStart, QuerySta
     """A class decorator declares a Where is available in the current query."""
 
 
-class WithAvailable(QueryStartAvailable, Unwind, Where, Set, Remove, CaseWhen, Return, Limit, Skip, OrderBy):
+class WithAvailable(QueryStartAvailable, Unwind, Where, Set, Remove, CaseWhen, Return, Limit, Skip, OrderBy, Case):
     """A class decorator declares a With is available in the current query."""
 
 
@@ -958,7 +999,7 @@ class YieldAvailable(QueryStartAvailable, Node, Where, Return):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Union, Unwind, Where, With, Yield):
+class AnyAvailable(Call, Case, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Union, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 

@@ -7,7 +7,8 @@
         "args": {
           "literal": {
             "type": "str",
-            "description": "A Cypher string describing the objects to be returned, referencing name/names which were defined earlier in the query"
+            "description": "A Cypher string describing the objects to be returned, referencing name/names which were defined earlier in the query",
+            "default": "None"
           }
         }
       },
@@ -29,6 +30,8 @@
       "Limit",
       "Skip",
       "OrderBy",
-      "Union"
+      "Union",
+      "CaseWhen",
+      "Case"
     ] 
   }

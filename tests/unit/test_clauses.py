@@ -59,7 +59,12 @@ rendered = {
     'UNION': qb.match().node(ref_name='n', labels="Actor").return_mapping([('n.name', 'name')]).union().match().node(
         ref_name='n', labels="Movie").return_mapping([('n.title', 'name')]),
     'UNION (all)': qb.match().node(ref_name='n', labels="Actor").return_mapping(
-        [('n.name', 'name')]).union_all().match().node(ref_name='n', labels="Movie").return_mapping([('n.title', 'name')])
+        [('n.name', 'name')]).union_all().match().node(ref_name='n', labels="Movie").return_mapping([('n.title', 'name')]),
+    'CASE (simple)': qb.match().node(ref_name="n", labels="Person").return_literal().case(when_then_mapping={"1": "'blue'", "2": ["'brown'", "'hazel'"]}, default_result="3", results_ref="result, n.eyes", test_expression="n.eyes"),
+    'CASE (simple extended)': qb.match().node(ref_name="n", labels="Person").return_literal("n.name,").case(when_then_mapping={"'Unknown'": ["IS NULL", "IS NOT TYPED INTEGER | FLOAT"], "'Baby'": ["= 0", "= 1", "= 2"], "'Child'": "<= 13", "'Teenager'": "< 20", "'Young Adult'": "< 30", "'Immortal'": "> 1000"}, default_result="'Adult'", test_expression="n.age", results_ref="result"),
+    'CASE (generic)': qb.match().node(ref_name="n", labels="Person").return_literal().case(when_then_mapping={"1": "n.eyes = 'blue'", "2": "n.age < 40"}, default_result="3", results_ref="result, n.eyes, n.age"),
+    'CASE (null values)': qb.match().node(ref_name="n", labels="Person").return_literal("n.name,").case(when_then_mapping={"-1": "n.age IS NULL"}, default_result="n.age - 10", results_ref="age_10_years_ago"),
+    'CASE (with set)': qb.match().node(ref_name="n", labels="Person").with_("n,").case(when_then_mapping={"1": "'blue'", "2": "'brown'"}, default_result="3", results_ref="colorCode", test_expression="n.eyes").set({"n.colorCode": "colorCode"}, escape_values=False).return_literal("n.name, n.colorCode")
 }
 
 expected = {
@@ -116,6 +121,18 @@ expected = {
     'REMOVE (list)': 'MATCH (n) REMOVE n.age, n.name RETURN n.age, n.name',
     'UNION': 'MATCH (n: Actor) RETURN n.name as name UNION MATCH (n: Movie) RETURN n.title as name',
     'UNION (all)': 'MATCH (n: Actor) RETURN n.name as name UNION ALL MATCH (n: Movie) RETURN n.title as name',
+    'CASE (simple)': "MATCH (n: Person) RETURN CASE n.eyes WHEN 'blue' THEN 1 WHEN 'brown', 'hazel' THEN 2 ELSE 3 END"
+                     " AS result, n.eyes",
+    'CASE (simple extended)': "MATCH (n: Person) RETURN n.name, CASE n.age WHEN IS NULL, IS NOT TYPED INTEGER | FLOAT"
+                              " THEN 'Unknown' WHEN = 0, = 1, = 2 THEN 'Baby' WHEN <= 13 THEN 'Child' WHEN < 20 THEN"
+                              " 'Teenager' WHEN < 30 THEN 'Young Adult' WHEN > 1000 THEN 'Immortal' ELSE 'Adult' END"
+                              " AS result",
+    'CASE (generic)': "MATCH (n: Person) RETURN CASE WHEN n.eyes = 'blue' THEN 1 WHEN n.age < 40 THEN 2 ELSE 3 END"
+                      " AS result, n.eyes, n.age",
+    'CASE (null values)': "MATCH (n: Person) RETURN n.name, CASE WHEN n.age IS NULL THEN -1 ELSE n.age - 10 END"
+                          " AS age_10_years_ago",
+    'CASE (with set)': "MATCH (n: Person) WITH n, CASE n.eyes WHEN 'blue' THEN 1 WHEN 'brown' THEN 2 ELSE 3 END "
+                       "AS colorCode SET n.colorCode = colorCode RETURN n.name, n.colorCode"
 }
 
 

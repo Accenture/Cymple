@@ -1,0 +1,42 @@
+{
+  "clause_name": "CASE",
+  "methods": [
+    {
+      "name": "case",
+      "docstring_summary": "Concatenate a CASE clause to the query, to compare a single expression against multiple values or to express multiple conditional statements.",
+      "args": {
+        "when_then_mapping": {
+          "type": "Dict[str, Union[List[str], str]]",
+          "description": "A dictionary such that a value represents a literal expression (or a list of expressions) whose result will be compared to test_expression if given, else is evaluated to a BOOLEAN, and it's key represents the literal expression returned as output if the value matches test_expression if giver, or if the expression evaluates to TRUE."
+        },
+        "default_result": {
+          "type": "str",
+          "description": "The expression to return if no value matches the test expression if given, or if all expressions evaluated as FALSE."
+        },
+        "results_ref": {
+          "type": "str",
+          "description": "The reference name of the resulted returned values, plus any other desired reference names to return.",
+          "default": "None"
+        },
+        "test_expression": {
+          "type": "str",
+          "description": "An expression to test the cases against. For example, 'n.name'. Optional.",
+          "default": "None"
+        }
+      }
+    }
+  ],
+  "successors": [
+    "QueryStartAvailable",
+    "Unwind",
+    "Where",
+    "Set",
+    "Remove",
+    "CaseWhen",
+    "Return",
+    "Limit",
+    "Skip",
+    "OrderBy",
+    "Union"
+  ]
+}

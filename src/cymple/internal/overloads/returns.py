@@ -1,6 +1,8 @@
 
-def return_literal(self, literal: str):
-    ret = f' RETURN {literal}'
+def return_literal(self, literal):
+    ret = f' RETURN'
+    if literal is not None:
+        ret += f' {literal}'
 
     return ReturnAvailable(self.query + ret)
 

@@ -1,6 +1,15 @@
+from typing import Dict, List, Union
 
 
-def case_when(self, filters: dict, on_true: str, on_false: str, ref_name: str, comparison_operator: str = '"', boolean_operator: str = 'AND', **kwargs):
-    filt = ' CASE WHEN ' + Properties(filters).to_str(comparison_operator, boolean_operator, **kwargs)
-    filt += f' THEN {on_true} ELSE {on_false} END as {ref_name}'
-    return CaseWhenAvailable(self.query + filt)
+def case(when_then_mapping: Dict[str, Union[List[str], str]], default_result: str, results_ref: str, test_expression: str = None):
+    ret = " CASE"
+    if test_expression is not None:
+        ret += f" {test_expression}"
+    for then, when in when_then_mapping.items():
+        if type(when) is not list:
+            when = [when]
+        ret += f" WHEN {', '.join(when)} THEN {then}"
+    ret += f" ELSE {default_result} END"
+    if results_ref is not None:
+        ret += f" AS {results_ref}"
+    return CaseAvailable(self.query + ret)
