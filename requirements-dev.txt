@@ -1,6 +1,6 @@
 -r requirements-test.txt
 pip-tools==6.6.0
-setuptools==70.0.0
+setuptools==78.1.1
 wheel==0.46.2
 pylint==2.13.5
 pycodestyle==2.8.0
