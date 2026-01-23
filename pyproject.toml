@@ -1,6 +1,9 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 
+[project]
+license = "MIT"
+
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
 
